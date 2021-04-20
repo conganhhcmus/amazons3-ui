@@ -3,3 +3,11 @@ export interface ILoginValues {
   username: string;
   password: string;
 }
+
+
+export interface IRegisterValues {
+    userName: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+}
