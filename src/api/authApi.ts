@@ -6,7 +6,6 @@ const authApi = {
     const body = {
       username,
       password,
-      role: '0',
     };
 
     return axiosClient.post(url, body);
@@ -17,7 +16,6 @@ const authApi = {
       rootUsername,
       username,
       password,
-      role: '1',
     };
 
     return axiosClient.post(url, body);
