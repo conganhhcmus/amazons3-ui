@@ -1,6 +1,5 @@
 import { Button, Form, Input } from 'antd';
 import React from 'react';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { ILoginValues } from 'constants/interface';
 import { ETypeUser } from 'constants/enum';
