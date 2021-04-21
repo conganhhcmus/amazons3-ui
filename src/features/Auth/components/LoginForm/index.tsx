@@ -29,36 +29,29 @@ function LoginForm(props: IProps) {
 			onFinish={onSubmit}
 		>
 			{typeUser === ETypeUser.user && (
-				<Form.Item
-					name="rootUsername"
-					rules={[{ required: true, message: 'Please input root usernames' }]}
-				>
-					<Input
-						prefix={<UserOutlined />}
-						placeholder="Root Username"
-						size="large"
-					/>
-				</Form.Item>
+				<>
+					<p className="label required">Root Username</p>
+					<Form.Item
+						name="rootUsername"
+						rules={[{ required: true, message: 'Please input root username' }]}
+					>
+						<Input size="large" />
+					</Form.Item>
+				</>
 			)}
+			<p className="label required">Username</p>
 			<Form.Item
 				name="username"
 				rules={[{ required: true, message: 'Please input username' }]}
 			>
-				<Input
-					prefix={<UserOutlined />}
-					placeholder="Username"
-					size="large"
-				/>
+				<Input size="large" />
 			</Form.Item>
+			<p className="label required">Password</p>
 			<Form.Item
 				name="password"
 				rules={[{ required: true, message: 'Please input password!' }]}
 			>
-				<Input.Password
-					prefix={<LockOutlined />}
-					placeholder="Password"
-					size="large"
-				/>
+				<Input.Password size="large" />
 			</Form.Item>
 			{typeUser === ETypeUser.rootUser && (
 				<div className="d-flex justify-content-end mb-3">
