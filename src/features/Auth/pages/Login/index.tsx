@@ -32,7 +32,7 @@ function Login() {
 
 			authApi.loginRootUser(username, password).then((res: any) => {
 				const { accessToken } = res;
-				if (!accessToken) throw new Error(res?.msg || "401 Unauthorized");
+				if (!accessToken) throw new Error(res?.msg || "");
 				dispatch(saveToken(accessToken));
 				setIsSubmitting(false);
 				message.success("Successful logged in");
@@ -45,7 +45,7 @@ function Login() {
 
 			authApi.loginUser(rootUsername, username, password).then((res: any) => {
 				const { accessToken } = res;
-				if (!accessToken) throw new Error(res?.msg || "401 Unauthorized");
+				if (!accessToken) throw new Error(res?.msg || "");
 				dispatch(saveToken(accessToken));
 				setIsSubmitting(false);
 				message.success("Successful logged in");
