@@ -25,6 +25,11 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       
+      - name: Yarn Test Action
+        # You may pin to the exact commit or the version.
+        # uses: onichandame/node-test-action@5ed9225a3e100e41663866c038dbd2befa5363dc
+        uses: onichandame/node-test-action@0.0.0
+      
       - name: Docker Login
         # You may pin to the exact commit or the version.
         # uses: docker/login-action@f3364599c6aa293cdc2b8391b1b56d0c30e45c8a
