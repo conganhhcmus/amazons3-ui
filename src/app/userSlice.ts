@@ -4,7 +4,7 @@ import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 
 const initialState = {
-  token: cookies.get('token', { path: '/' } as any) || null,
+  token: cookies.get('token') || null,
 };
 
 const userSlice = createSlice({
@@ -15,7 +15,7 @@ const userSlice = createSlice({
       state.token = action.payload;
       cookies.set('token', action.payload, { path: '/' });
     },
-    removeToken: (state, action) => {
+    removeToken: (state) => {
       state.token = null;
       cookies.remove('token', { path: '/' });
     },

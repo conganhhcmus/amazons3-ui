@@ -11,7 +11,7 @@ import store from 'app/store';
 import ResetPassword from './features/Auth/pages/ResetPassword';
 import Register from './features/Auth/pages/Register';
 
-function App() {
+function App(): JSX.Element {
   return (
     <Provider store={store}>
       <BrowserRouter>
