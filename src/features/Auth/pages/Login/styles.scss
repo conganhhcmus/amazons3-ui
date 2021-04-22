@@ -5,3 +5,16 @@
     width: 350px;
   }
 }
+
+.label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.required {
+  &::before {
+    content: '*';
+    color: red;
+    margin-right: 5px;
+  }
+}
