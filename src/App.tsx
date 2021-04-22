@@ -8,6 +8,8 @@ import PrivateRoute from 'components/PrivateRoute';
 import User from 'features/User';
 import { Provider } from 'react-redux';
 import store from 'app/store';
+import ResetPassword from './features/Auth/pages/ResetPassword';
+import Register from './features/Auth/pages/Register';
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
       <BrowserRouter>
         <Switch>
           <PublicRoute path="/login" component={Login} />
+          <PublicRoute path="/register" component={Register} />
+          <PublicRoute path="/forgot-password" component={ResetPassword} />
 
           <PrivateRoute path="/users" component={User} />
 
