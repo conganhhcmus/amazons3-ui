@@ -27,11 +27,11 @@ function ResetPasswordForm(props: IProps) {
             <div>
                 <p className="font-weight-bold mb-0">
                     <span className="text-danger">* </span>
-                    <span>Username</span>
+                    <span>Email</span>
                 </p>
                 <Form.Item
-                    name="userName"
-                    rules={[{required: true, message: 'Please input your username'}]}
+                    name="email"
+                    rules={[{required: true, message: 'Please input your email'}]}
                 >
                     <Input
                         size="large"

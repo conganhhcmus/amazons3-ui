@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
 import 'features/Auth/pages/Login/styles.scss';
-import { Card, Form, message } from 'antd';
-import { useDispatch } from 'react-redux';
-import ResetPasswordForm from "../../components/ResetPasswordForm";
+import { Card, Form } from 'antd';
+//import { useDispatch } from 'react-redux';
+import ResetPasswordForm from "features/Auth/components/ResetPasswordForm";
 
 function ResetPassword() {
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-	const dispatch = useDispatch();
+	//const dispatch = useDispatch();
 
 	const [registerForm] = Form.useForm();
 
 	const handleResetPassword = (values: any) => {
 		setIsSubmitting(true);
-
-
 	}
 
 	return <div className="d-flex justify-content-center align-items-center min-vh-100 container-auth">

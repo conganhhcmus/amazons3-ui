@@ -2,28 +2,46 @@ import React, { useState } from 'react';
 import 'features/Auth/pages/Login/styles.scss';
 import { Card, Form, message } from 'antd';
 import {IRegisterValues} from 'constants/interface';
+import RegisterForm from "features/Auth/components/RegisterForm";
 import authApi from 'api/authApi';
-import { useDispatch } from 'react-redux';
-import { saveToken } from 'app/userSlice';
-import RegisterForm from "../../components/RegisterForm";
+
 
 function Register() {
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-
-	const dispatch = useDispatch();
 
 	const [registerForm] = Form.useForm();
 
 	const handleRegister = (values: IRegisterValues) => {
 		setIsSubmitting(true);
 
-        if (values.confirmPassword !== values.password){
-            message.success("Password and confirm password does not match!");
+		//validate email
+        const pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+        if (!pattern.test(values.email)){
+            message.error("Please input valid email address!");
             setIsSubmitting(false);
             return;
         }
-        message.success("Register successful!");
-        setIsSubmitting(false);
+
+        //validate password
+        if (values.confirmPassword !== values.password){
+            message.error("Password and confirm password does not match!");
+            setIsSubmitting(false);
+            return;
+        }
+
+        authApi.registerRootUser(values.userName, values.password, values.confirmPassword).then( (res : any) => {
+            if (res.statusCode === 201){
+                message.success("Register successful!");
+            }else if (res.statusCode === 200){
+                message.error("Username is already exist!");
+            }
+            setIsSubmitting(false);
+        }).catch((err: any) => {
+            setIsSubmitting(false);
+            message.error(err?.message);
+        });
+
+
 	}
 
 	return <div className="d-flex justify-content-center align-items-center min-vh-100 container-auth">
