@@ -1,5 +1,5 @@
 import React from 'react';
-import 'App.scss';
+import 'App.less';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import Login from 'features/Auth/pages/Login';
 import NotFound from 'components/NotFound';

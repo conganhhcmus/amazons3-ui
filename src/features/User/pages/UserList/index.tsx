@@ -14,7 +14,7 @@ function UserList(): JSX.Element {
   return (
     <div className="d-flex flex-column justify-content-center align-items-center min-vh-100">
       <div className="mb-2">User List Page</div>
-      <Button className="btn-s3" onClick={handleLogout}>
+      <Button type="primary" onClick={handleLogout}>
         Logout
       </Button>
     </div>

@@ -16,7 +16,7 @@ function NotFound(): JSX.Element {
         title="404"
         subTitle="Sorry, the page you visited does not exist."
         extra={
-          <Button className="btn-s3" onClick={handleBack}>
+          <Button type="primary" onClick={handleBack}>
             Back Home
           </Button>
         }
