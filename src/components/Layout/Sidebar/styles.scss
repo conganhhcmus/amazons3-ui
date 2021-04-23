@@ -1,0 +1,41 @@
+.logo {
+  height: 32px;
+  margin: 16px;
+  background: #fee074;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: calc(100vh - 64px);
+
+  padding-left: 20px;
+  padding-right: 20px;
+
+  .ant-menu-item {
+    border-radius: 8px;
+
+    &::after {
+      border: none;
+    }
+
+    svg {
+      transform: translateY(2px);
+    }
+
+    &:hover,
+    &-selected {
+      path {
+        fill: #00c2ff;
+      }
+      span {
+        color: #00c2ff !important;
+      }
+    }
+
+    span {
+      color: #8a9097;
+    }
+  }
+}

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import 'features/Auth/pages/Login/styles.scss';
 import { Card, Form, message } from 'antd';
-import LoginForm from 'features/Auth/components/LoginForm';
-import { ILoginValues } from 'constants/interface';
+import LoginForm, { ILoginValues } from 'features/Auth/components/LoginForm';
 import { ETypeUser } from 'constants/enum';
 import UserFrame from 'features/Auth/components/UserFrame';
 import IconRootUser from 'assets/icon/IconRootUser';
@@ -65,7 +64,7 @@ function Login(): JSX.Element {
   return (
     <div className="d-flex justify-content-center align-items-center min-vh-100 container-auth">
       <Card className="container-auth__card">
-        <h3 className="font-weight-bold text-center">Login</h3>
+        <h2 className="font-weight-bold text-center">Login</h2>
         <p className="text-center">Choose type account</p>
         <div className="d-flex justify-content-center">
           <UserFrame
