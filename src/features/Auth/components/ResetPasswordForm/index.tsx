@@ -29,7 +29,7 @@ function ResetPasswordForm(props: IProps): JSX.Element {
         </Form.Item>
       </div>
 
-      <Button htmlType="submit" className="btn-s3 w-100" size="large" loading={isSubmitting}>
+      <Button type="primary" htmlType="submit" className="w-100" size="large" loading={isSubmitting}>
         Submit
       </Button>
 

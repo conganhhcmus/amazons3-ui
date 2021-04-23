@@ -50,7 +50,7 @@ function LoginForm(props: IProps): JSX.Element {
           </Link>
         </div>
       )}
-      <Button htmlType="submit" className="btn-s3 w-100" size="large" loading={isSubmitting}>
+      <Button type="primary" htmlType="submit" className="w-100" size="large" loading={isSubmitting}>
         Log in
       </Button>
       {typeUser === ETypeUser.rootUser && (
