@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import 'features/Auth/pages/Login/styles.scss';
 import { Card, Form, message } from 'antd';
-import { IRegisterValues } from 'constants/interface';
-import RegisterForm from 'features/Auth/components/RegisterForm';
+import RegisterForm, { IRegisterValues } from 'features/Auth/components/RegisterForm';
 import authApi from 'api/authApi';
 
 function Register(): JSX.Element {
@@ -12,23 +11,6 @@ function Register(): JSX.Element {
 
   const handleRegister = (values: IRegisterValues) => {
     setIsSubmitting(true);
-
-    //validate email
-    const pattern = new RegExp(
-      /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i,
-    );
-    if (!pattern.test(values.email)) {
-      message.error('Please input valid email address!');
-      setIsSubmitting(false);
-      return;
-    }
-
-    //validate password
-    if (values.confirmPassword !== values.password) {
-      message.error('Password and confirm password does not match!');
-      setIsSubmitting(false);
-      return;
-    }
 
     authApi
       .registerRootUser(values.userName, values.password, values.confirmPassword)
@@ -50,7 +32,7 @@ function Register(): JSX.Element {
   return (
     <div className="d-flex justify-content-center align-items-center min-vh-100 container-auth">
       <Card className="container-auth__card">
-        <h3 className="font-weight-bold text-center">Register</h3>
+        <h2 className="font-weight-bold text-center">Register</h2>
         <RegisterForm form={registerForm} isSubmitting={isSubmitting} onSubmit={handleRegister} />
       </Card>
     </div>

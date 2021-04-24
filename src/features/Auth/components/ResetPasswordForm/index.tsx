@@ -20,11 +20,20 @@ function ResetPasswordForm(props: IProps): JSX.Element {
   return (
     <Form form={form} name="reset password" initialValues={initialValues} onFinish={onSubmit}>
       <div>
-        <p className="font-weight-bold mb-0">
-          <span className="text-danger">* </span>
-          <span>Email</span>
-        </p>
-        <Form.Item name="email" rules={[{ required: true, message: 'Please input your email' }]}>
+        <p className="label required">Email</p>
+        <Form.Item
+          name="email"
+          rules={[
+            {
+              type: 'email',
+              message: 'The input is not valid email',
+            },
+            {
+              required: true,
+              message: 'Please input email',
+            },
+          ]}
+        >
           <Input size="large" />
         </Form.Item>
       </div>
@@ -35,9 +44,7 @@ function ResetPasswordForm(props: IProps): JSX.Element {
 
       <p className="mt-3 mb-0 text-center">Your new password will be send to your email.</p>
       <p className="text-center mt-3 mb-0">
-        <Link className="link-s3" to="/login">
-          Back to login
-        </Link>
+        <Link to="/login">Back to login</Link>
       </p>
     </Form>
   );

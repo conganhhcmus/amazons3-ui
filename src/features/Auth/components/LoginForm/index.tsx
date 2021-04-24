@@ -55,10 +55,7 @@ function LoginForm(props: IProps): JSX.Element {
       </Button>
       {typeUser === ETypeUser.rootUser && (
         <p className="mt-3 mb-0 text-center">
-          Don&apos;t have an account yet?{' '}
-          <Link className="link-s3" to="/register">
-            Register
-          </Link>
+          Don&apos;t have an account yet? <Link to="/register">Register</Link>
         </p>
       )}
     </Form>

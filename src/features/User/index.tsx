@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, useRouteMatch, Switch } from 'react-router-dom';
+import { Route, useRouteMatch, Switch, Redirect } from 'react-router-dom';
 import UserList from './pages/UserList';
 
 function User(): JSX.Element {
@@ -8,6 +8,7 @@ function User(): JSX.Element {
   return (
     <Switch>
       <Route exact path={match.url} component={UserList} />
+      <Redirect from="/" to={match.url} />
     </Switch>
   );
 }

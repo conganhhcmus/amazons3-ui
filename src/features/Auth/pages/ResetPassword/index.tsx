@@ -20,7 +20,7 @@ function ResetPassword(): JSX.Element {
   return (
     <div className="d-flex justify-content-center align-items-center min-vh-100 container-auth">
       <Card className="container-auth__card">
-        <h3 className="font-weight-bold text-center">Reset password</h3>
+        <h2 className="font-weight-bold text-center">Reset password</h2>
         <ResetPasswordForm form={registerForm} isSubmitting={isSubmitting} onSubmit={handleResetPassword} />
       </Card>
     </div>

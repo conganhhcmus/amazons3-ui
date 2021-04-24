@@ -28,42 +28,54 @@ function RegisterForm(props: IProps): JSX.Element {
   return (
     <Form form={form} name="register" initialValues={initialValues} onFinish={onSubmit}>
       <div>
-        <p className="font-weight-bold mb-0">
-          <span className="text-danger">* </span>
-          <span>Username</span>
-        </p>
+        <p className="label required">Username</p>
         <Form.Item name="userName" rules={[{ required: true, message: 'Please input your username' }]}>
           <Input size="large" />
         </Form.Item>
       </div>
 
       <div>
-        <p className="font-weight-bold mb-0">
-          <span className="text-danger">* </span>
-          <span>Email</span>
-        </p>
-
-        <Form.Item name="email" rules={[{ required: true, message: 'Please input your email address' }]}>
+        <p className="label required">Email</p>
+        <Form.Item
+          name="email"
+          rules={[
+            {
+              type: 'email',
+              message: 'The input is not valid email!',
+            },
+            {
+              required: true,
+              message: 'Please input email!',
+            },
+          ]}
+        >
           <Input size="large" />
         </Form.Item>
       </div>
 
       <div>
-        <p className="font-weight-bold mb-0">
-          <span className="text-danger">* </span>
-          <span>Password</span>
-        </p>
+        <p className="label required">Password</p>
         <Form.Item name="password" rules={[{ required: true, message: 'Please input your password' }]}>
           <Input.Password size="large" />
         </Form.Item>
       </div>
 
       <div>
-        <p className="font-weight-bold mb-0">
-          <span className="text-danger">* </span>
-          <span>Confirm password</span>
-        </p>
-        <Form.Item name="confirmPassword" rules={[{ required: true, message: 'Please confirm your password' }]}>
+        <p className="label required">Confirm password</p>
+        <Form.Item
+          name="confirmPassword"
+          rules={[
+            { required: true, message: 'Please confirm your password' },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('password') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error('The two passwords do not match'));
+              },
+            }),
+          ]}
+        >
           <Input.Password size="large" />
         </Form.Item>
       </div>
@@ -73,10 +85,7 @@ function RegisterForm(props: IProps): JSX.Element {
       </Button>
 
       <p className="mt-3 mb-0 text-center">
-        Already have an account?{' '}
-        <Link className="link-s3" to="/login">
-          Login
-        </Link>
+        Already have an account? <Link to="/login">Login</Link>
       </p>
     </Form>
   );
