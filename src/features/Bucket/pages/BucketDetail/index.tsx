@@ -1,7 +1,7 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import HeaderPage from "components/HeaderPage";
-import {Button, Input, message, TablePaginationConfig} from "antd";
-import {SearchOutlined, DownloadOutlined, UploadOutlined} from "@ant-design/icons";
+import {Button, Input, message, TablePaginationConfig, Dropdown, Menu} from "antd";
+import {SearchOutlined, DownloadOutlined, UploadOutlined, SettingOutlined} from "@ant-design/icons";
 import ObjectTable, {IObjectRow} from "features/Object/components/ObjectTable";
 import {range} from "lodash";
 import {FilterValue, SorterResult} from "antd/lib/table/interface";
@@ -15,6 +15,26 @@ const dummyData = range(0, 30, 1).map((index: number) => ({
   size: `${index} MB`,
   dateModified: '30/04/2021',
 }));
+
+const menu = (
+  <Menu>
+    <Menu.Item>
+      <a target="_blank">
+                Delete bucket
+      </a>
+    </Menu.Item>
+    <Menu.Item>
+      <a target="_blank">
+                Download bucket
+      </a>
+    </Menu.Item>
+    <Menu.Item>
+      <a target="_blank">
+                Setting
+      </a>
+    </Menu.Item>
+  </Menu>
+);
 
 function BucketDetail(): JSX.Element {
   const history = useHistory();
@@ -104,6 +124,9 @@ function BucketDetail(): JSX.Element {
             <Button className="ml-2" type="primary" danger onClick={handleDeleteMulObjects}>
                   Delete
             </Button>
+            <Dropdown overlay={menu} placement="bottomCenter" arrow>
+              <Button className="ml-2" type="text" size="large" icon={<SettingOutlined/>}/>
+            </Dropdown>
           </div>
         </div>
         <div className="mt-4">
