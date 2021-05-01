@@ -25,7 +25,7 @@ interface IObjectTable {
   onDelete: (bucketID: number, objectID: number) => void;
 }
 
-function BucketTable(props: IObjectTable): JSX.Element {
+function ObjectTable(props: IObjectTable): JSX.Element {
   const { loading = true, data = [], onChange, onSelect, onViewDetail, onDelete } = props;
 
   const columns = [
@@ -78,4 +78,4 @@ function BucketTable(props: IObjectTable): JSX.Element {
   );
 }
 
-export default BucketTable;
+export default ObjectTable;

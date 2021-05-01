@@ -1,11 +1,12 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import HeaderPage from "components/HeaderPage";
-import {Button, Input, message, TablePaginationConfig, Dropdown, Menu} from "antd";
+import {Button, Input, message, TablePaginationConfig, Dropdown, Menu, Form} from "antd";
 import {SearchOutlined, DownloadOutlined, UploadOutlined, SettingOutlined} from "@ant-design/icons";
 import ObjectTable, {IObjectRow} from "features/Object/components/ObjectTable";
 import {range} from "lodash";
 import {FilterValue, SorterResult} from "antd/lib/table/interface";
 import {useHistory} from "react-router";
+import ModalCreateFolder from "features/Object/components/ModalCreateFolder";
 
 const dummyData = range(0, 30, 1).map((index: number) => ({
   id: index,
@@ -40,6 +41,8 @@ function BucketDetail(): JSX.Element {
   const history = useHistory();
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedObjectKeys, setSelectedObjectKeys] = useState<React.Key[]>([]);
+  const [visibleModalCreate, setVisibleModalCreate] = useState<boolean>(false);
+  const [createFolderForm] = Form.useForm();
 
   //Search
   let timeout: NodeJS.Timeout;
@@ -94,6 +97,17 @@ function BucketDetail(): JSX.Element {
   const handleDeleteObject = (bucketID: number, objectID: number): void => {
     message.info(`Delete object id = ${objectID}`);
   };
+  
+  //Create folder modal
+  const toggleModalCreate = () => {
+    setVisibleModalCreate(!visibleModalCreate);
+  };
+  
+  const handleCreateFolder = (): void => {
+    message.info('Create new folder');
+    toggleModalCreate();
+    createFolderForm.resetFields();
+  };
     
   return (
     <>
@@ -118,7 +132,7 @@ function BucketDetail(): JSX.Element {
             <Button className="ml-2" type="default" icon={<DownloadOutlined />}>
                   Download
             </Button>
-            <Button className="ml-2" type="default" >
+            <Button className="ml-2" type="default" onClick={toggleModalCreate}>
                   Create folder
             </Button>
             <Button className="ml-2" type="primary" danger onClick={handleDeleteMulObjects}>
@@ -140,13 +154,13 @@ function BucketDetail(): JSX.Element {
             onDelete={handleDeleteObject}
           />
         </div>
-        {/*<ModalCreateBucket*/}
-        {/*  visible={visibleModalCreate}*/}
-        {/*  onCancel={toggleModalCreate}*/}
-        {/*  onOk={handleCreateBucket}*/}
-        {/*  loading={loading}*/}
-        {/*  form={createBucketForm}*/}
-        {/*/>*/}
+        <ModalCreateFolder
+          visible={visibleModalCreate}
+          onCancel={toggleModalCreate}
+          onOk={handleCreateFolder}
+          loading={loading}
+          form={createFolderForm}
+        />
       </div>
     </>
   );
