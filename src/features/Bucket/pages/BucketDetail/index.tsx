@@ -123,7 +123,7 @@ function BucketDetail(): JSX.Element {
           </div>
           <div className="bucket-table-container__actions">
             <Button type="primary" icon={<UploadOutlined/>}>
-                            Upload
+                    Upload
             </Button>
             <Button className="ml-2" type="default" icon={<DownloadOutlined />}>
                   Download

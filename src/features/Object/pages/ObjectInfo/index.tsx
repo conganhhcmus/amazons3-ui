@@ -1,6 +1,6 @@
 import React from 'react';
 import HeaderPage from "../../../../components/HeaderPage";
-import {Button, Row, Col, Typography, Space} from "antd";
+import {Button, Row, Col, Typography} from "antd";
 import {DownloadOutlined, DeleteOutlined} from "@ant-design/icons";
 
 const { Title, Text } = Typography;
