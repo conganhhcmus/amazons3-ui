@@ -90,12 +90,8 @@ function BucketDetail(): JSX.Element {
     message.info('Delete multi objects');
   };
 
-  const handleViewObject = (bucketID: number, objectID: number): void => {
-    history.push(`/buckets/${bucketID}/${objectID}`);
-  };
-
-  const handleDeleteObject = (bucketID: number, objectID: number): void => {
-    message.info(`Delete object id = ${objectID}`);
+  const handleViewObject = (objectID: number): void => {
+    history.push(`/objects/${objectID}`);
   };
   
   //Create folder modal
@@ -151,8 +147,7 @@ function BucketDetail(): JSX.Element {
             onSelect={handleSelect}
             onSearch={handleSearch}
             onViewDetail={handleViewObject}
-            onDelete={handleDeleteObject}
-          />
+            parentID={1}/>
         </div>
         <ModalCreateFolder
           visible={visibleModalCreate}

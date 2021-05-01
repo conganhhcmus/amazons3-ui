@@ -14,6 +14,7 @@ export interface IObjectRow {
 interface IObjectTable {
   loading: boolean;
   data: IObjectRow[];
+  parentID: number;
   onSearch: (e: ChangeEvent<HTMLInputElement>) => void;
   onChange: (
     pagination: TablePaginationConfig,
@@ -22,11 +23,10 @@ interface IObjectTable {
   ) => void;
   onSelect: (selectedRowKeys: React.Key[], selectedRows: IObjectRow[]) => void;
   onViewDetail: (bucketID: number, objectID: number) => void;
-  onDelete: (bucketID: number, objectID: number) => void;
 }
 
 function ObjectTable(props: IObjectTable): JSX.Element {
-  const { loading = true, data = [], onChange, onSelect, onViewDetail, onDelete } = props;
+  const { loading = true, data = [], parentID ,onChange, onSelect, onViewDetail } = props;
 
   const columns = [
     {
@@ -35,6 +35,8 @@ function ObjectTable(props: IObjectTable): JSX.Element {
       fixed: true,
       sorter: true,
       sortDirection: ['descend', 'ascend'],
+      // eslint-disable-next-line react/display-name
+      render: (text: string, record: IObjectRow) => <a onClick={() => onViewDetail(parentID, record?.id,)} >{text}</a>,
     },
     {
       title: 'Folder',
