@@ -1,68 +1,71 @@
-.user__header{
-    width: 100%;
-    display: flex;
-    margin-top: 100px;
+.user__header {
+  width: 100%;
+  display: flex;
+  margin-top: 100px;
 }
-.user__search{
-    width: 30%;
-    border-radius: 20px;
+.user__search {
+  width: 30%;
+  border-radius: 20px;
 }
-.user__create__btn{
-    width: 10% !important;
-    border-radius: 8px;
+.user__create__btn {
+  width: 10% !important;
+  border-radius: 8px;
 }
-.user__delete__btn#delete__btn{
-    width: 10% !important;
-    background-color: #FD7D7D;
-    border-radius: 8px;
-    margin-left: 2%;
+.user__delete__btn#delete__btn {
+  width: 10% !important;
+  background-color: #fd7d7d;
+  border-radius: 8px;
+  margin-left: 2%;
 }
-#delete__btn:hover{
-    background-color: red;
+#delete__btn:hover {
+  background-color: red;
 }
-.user__body{
-    width: 100%;
-    display: flex;
-    margin-top: 50px;
+.user__body {
+  width: 100%;
+  display: flex;
+  margin-top: 50px;
 }
-.ctit{
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.ctit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.ctit2{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+.ctit2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
-.user__body__text{
-    font-size: 17px;
-    font-weight: bold;
+.user__body__text {
+  font-size: 17px;
+  font-weight: bold;
 }
-.bt{
-    display: flex;
-    align-items: center;
-    border-bottom: 2px solid #C2C0C0 ;
+.bt {
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid #c2c0c0;
 }
-.custom__btn{
-    background:#00C2FF !important ;
-    color: #FFFEFE !important;
+.custom__btn {
+  background: #00c2ff !important ;
+  color: #fffefe !important;
 }
-.user__item{
-    position: relative;
-    margin-top: 20px;
+.user__item {
+  position: relative;
+  margin-top: 20px;
 }
-.user__body__text2{
-    font-size: 15px;
+.user__body__text2 {
+  font-size: 15px;
 }
-.user__item__btn{
-    border-radius: 8px;
+.user__item__btn {
+  border-radius: 8px;
 }
-.user__pagination{
-    display: flex;
-    justify-content: flex-end;
-    position: relative;
-    top: 30px;
-    right: 60px;
+.user__pagination {
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  top: 30px;
+  right: 60px;
+}
+.modal__span {
+  color: #fd7d7d;
 }

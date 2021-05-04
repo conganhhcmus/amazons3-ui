@@ -3,11 +3,32 @@ import { SearchOutlined ,CaretUpOutlined,CaretDownOutlined,CheckCircleTwoTone,Ey
 import {  Input } from 'antd';
 import './userlist.css'
 import { Button as Button1} from 'antd';
-import { Button, Header, Image, Modal,Pagination } from 'semantic-ui-react'
+import { Button, Modal,Pagination,Dropdown } from 'semantic-ui-react'
 
 function UserList(): JSX.Element {
   const [open, setOpen] = React.useState(false)
-
+  const Options =[
+    {
+      key: 'fullaccess',
+      value:'fullaccess',
+      text: 'Full Access'
+    },
+    {
+      key: 'readonly',
+      value:'readonly',
+      text: 'Read Only'
+    },
+    {
+      key: 'writeonly',
+      value:'writeonly',
+      text: 'Write Only'
+    },
+    {
+      key: 'noaccess',
+      value:'noaccess',
+      text: 'No Access'
+    },
+  ]
   return(
     <div>
       <div>User List Page</div>
@@ -20,21 +41,38 @@ function UserList(): JSX.Element {
           open={open}
           trigger={<Button className='user__create__btn custom__btn'>Create</Button>}
         >
-          <Modal.Header>Select a Photo</Modal.Header>
-          <Modal.Content image>
-            <Image size='medium' src='https://react.semantic-ui.com/images/avatar/large/rachel.png' wrapped />
+          <Modal.Header>Create user</Modal.Header>
+          <Modal.Content >
             <Modal.Description>
-              <Header>Default Profile Image</Header>
-              <p>hello</p>
-              <p>Is it okay to use this photo?</p>
+              <div>
+                <div><span className='modal__span'>*</span>Username:</div>
+                <div>
+                  <Input size="large" placeholder="Username"  />
+                </div>
+                <br></br>
+                <div><span className='modal__span'>*</span>Password:</div>
+                <div>
+                  <Input.Password size="large" placeholder="Password"  />
+                </div>
+                <br></br>
+                <div><span className='modal__span'>*</span>Permisstion:</div>
+                <div>
+                  <Dropdown
+                    placeholder='Select Friend'
+                    fluid
+                    selection
+                    options={Options}
+                  />
+                </div>
+              </div>
             </Modal.Description>
           </Modal.Content>
           <Modal.Actions>
             <Button color='black' onClick={() => setOpen(false)}>
-              Nope
+              Cancel
             </Button>
             <Button
-              content="Yep, that's me"
+              content="Submit"
               labelPosition='right'
               icon='checkmark'
               onClick={() => setOpen(false)}
