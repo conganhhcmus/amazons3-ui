@@ -59,6 +59,18 @@
 .user__item__btn {
   border-radius: 8px;
 }
+.fullaccess {
+  background-color: #2ae9dd;
+}
+.readonly {
+  background-color: #00c2ff;
+}
+.writeonly {
+  background-color: #fee074;
+}
+.noaccess {
+  background-color: #fd7d7d;
+}
 .user__pagination {
   display: flex;
   justify-content: flex-end;
@@ -68,4 +80,8 @@
 }
 .modal__span {
   color: #fd7d7d;
+}
+
+.sort__icon {
+  cursor: pointer;
 }
