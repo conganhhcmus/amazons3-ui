@@ -1,108 +1,39 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-export interface fake {
+import { random, range } from 'lodash';
+export interface user {
+  id: number;
   userName: string;
-  permisstion: string;
+  permisstion: number;
   accessKeyAge: string;
   passwordAge: string;
   lastAcctivity: string;
 }
-
-const fake1: fake[] = [
-  {
-    userName: '921',
-    permisstion: 'fullaccess',
-    accessKeyAge: '20 day ago',
-    passwordAge: '15 day ago',
-    lastAcctivity: '15 day ago',
-  },
-  {
-    userName: 'boy2ball',
-    permisstion: 'fullaccess',
-    accessKeyAge: '1 day ago',
-    passwordAge: '1 day ago',
-    lastAcctivity: '1 day ago',
-  },
-  {
-    userName: 'boy1balls',
-    permisstion: 'noaccess',
-    accessKeyAge: '13 day ago',
-    passwordAge: '12 day ago',
-    lastAcctivity: '16 day ago',
-  },
-  {
-    userName: 'boy41ball',
-    permisstion: 'writeonly',
-    accessKeyAge: '1 day ago',
-    passwordAge: '1 day ago',
-    lastAcctivity: '1 day ago',
-  },
-  {
-    userName: 'boy21ball',
-    permisstion: 'readonly',
-    accessKeyAge: '13 day ago',
-    passwordAge: '17 day ago',
-    lastAcctivity: '10 day ago',
-  },
-  {
-    userName: 'boy61ball',
-    permisstion: 'fullaccess',
-    accessKeyAge: '11 day ago',
-    passwordAge: '12 day ago',
-    lastAcctivity: '13 day ago',
-  },
-  {
-    userName: 'boy31ball',
-    permisstion: 'fullaccess',
-    accessKeyAge: '13 day ago',
-    passwordAge: '12 day ago',
-    lastAcctivity: '17 day ago',
-  },
-  {
-    userName: 'boy51ball',
-    permisstion: 'fullaccess',
-    accessKeyAge: '18 day ago',
-    passwordAge: '16 day ago',
-    lastAcctivity: '14 day ago',
-  },
-  {
-    userName: 'boy01ball',
-    permisstion: 'fullaccess',
-    accessKeyAge: '21 day ago',
-    passwordAge: '31 day ago',
-    lastAcctivity: '41 day ago',
-  },
-  {
-    userName: 'boy15ball',
-    permisstion: 'fullaccess',
-    accessKeyAge: '15 day ago',
-    passwordAge: '15 day ago',
-    lastAcctivity: '15 day ago',
-  },
-  {
-    userName: '921',
-    permisstion: 'fullaccess',
-    accessKeyAge: '15 day ago',
-    passwordAge: '15 day ago',
-    lastAcctivity: '15 day ago',
-  },
-  {
-    userName: '921',
-    permisstion: 'fullaccess',
-    accessKeyAge: '20 day ago',
-    passwordAge: '15 day ago',
-    lastAcctivity: '15 day ago',
-  },
-]
+const dummyData= range(0,15,1).map((index: number)=>({
+  id: index,
+  userName: ` username ${index}`,
+  permisstion: random(1,4),
+  accessKeyAge: `${random(1,30)} day agos`,
+  passwordAge: `${random(1,30)} day agos`,
+  lastAcctivity: `${random(1,30)} day agos`
+}))
 const initialState = {
   createIamUser: {
     userName: '',
     passWord: '',
     permisstion: '',
   },
-  listUser: fake1,
+  editIamUser:{
+    id: '',
+    userName: '',
+    permisstion: '',
+    accessKeyAge: '',
+    passwordAge: '',
+    lastAcctivity: ''
+  },
+  listUser: dummyData,
+  searchIamUser: '',
 }
-const sortIncrease=(data: Array<fake>, key: number)=>{
+const sortIncrease=(data: Array<user>, key: number)=>{
   switch(key){
   case 1: 
     data.sort((a,b)=>{
@@ -144,13 +75,12 @@ const sortIncrease=(data: Array<fake>, key: number)=>{
   }
   return data
 }
-const sortDecrease=(data: Array<fake>, key: number)=>{
+const sortDecrease=(data: Array<user>, key: number)=>{
   sortIncrease(data,key).reverse()
 }
-const handleSort =(data: Array<fake>, key: number)=>{
+const handleSort =(data: Array<user>, key: number)=>{
   data=data.concat()
   if(data.length>1){
-    console.log('key',key)
     if(key==1){
       for(let i=1; i< data.length;i++){
         if(data[0].userName !=data[i].userName && data[0].userName> data[i].userName){
@@ -199,7 +129,7 @@ const handleSort =(data: Array<fake>, key: number)=>{
         }
       }
     }
-    else{
+    if(key==5){
       for(let i=1; i< data.length;i++){
         if(data[0].lastAcctivity !=data[i].lastAcctivity && data[0].lastAcctivity> data[i].lastAcctivity){
           sortIncrease(data,key)
@@ -225,12 +155,26 @@ const userListSlice = createSlice({
         ...action.payload,
       };
     },
-    sortUser: (state, action) => {
+    sortIamUser: (state, action) => {
       state.listUser= handleSort(state.listUser, action.payload)
     },
+    editIamUser:(state,action)=>{
+      state.editIamUser=action.payload
+    },
+    editIamUserFormChange:(state,action)=>{
+      state.editIamUser={
+        ...state.editIamUser,
+        ...action.payload
+      }
+    },
+    searchUser: (state,action)=>{
+      console.log(action)
+      state.searchIamUser=action.payload
+    }
+
   },
 });
 
 const { reducer, actions } = userListSlice;
-export const { createIamUser, sortUser } = actions;
-export default reducer;
+export const { createIamUser, sortIamUser,editIamUser,editIamUserFormChange,searchUser } = actions
+export default reducer
