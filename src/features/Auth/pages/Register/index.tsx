@@ -3,24 +3,23 @@ import 'features/Auth/pages/Login/styles.scss';
 import { Card, Form, message } from 'antd';
 import RegisterForm, { IRegisterValues } from 'features/Auth/components/RegisterForm';
 import authApi from 'api/authApi';
-// import { useDispatch } from 'react-redux';
-// import { saveToken } from 'app/userSlice';
+import { useHistory } from 'react-router';
 
 function Register(): JSX.Element {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const [registerForm] = Form.useForm();
-  // const dispatch = useDispatch();
+  const history = useHistory();
 
   const handleRegister = (values: IRegisterValues) => {
     setIsSubmitting(true);
     const { username, password, email } = values;
     authApi
       .registerRootUser(username, password, email)
-      .then((res) => {
-        console.log('🚀 ~ file: index.tsx ~ line 36 ~ .then ~ res', res);
-        // dispatch(saveToken(your_token))
+      .then(() => {
         setIsSubmitting(false);
+        history.push('/login');
+        message.success('Successful registered. Please login!');
       })
       .catch((err: Error) => {
         setIsSubmitting(false);
