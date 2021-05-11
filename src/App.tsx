@@ -4,7 +4,7 @@ import 'styles/common.scss';
 import { BrowserRouter, Redirect, Switch } from 'react-router-dom';
 import Login from 'features/Auth/pages/Login';
 import PublicRoute from 'components/PublicRoute';
-import PrivateRoute from 'components/PrivateRoute';
+// import PrivateRoute from 'components/PrivateRoute';
 import User from 'features/User';
 import { Provider } from 'react-redux';
 import store from 'app/store';
@@ -24,8 +24,8 @@ function App(): JSX.Element {
 
           <Layout>
             <Switch>
-              <PrivateRoute path="/buckets" component={Bucket} />
-              <PrivateRoute path="/users" component={User} />
+              <PublicRoute path="/buckets" component={Bucket} />
+              <PublicRoute path="/users" component={User} />
               <Redirect from="/" to="/buckets" />
             </Switch>
           </Layout>
