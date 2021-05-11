@@ -1,0 +1,26 @@
+.bucket-table-container {
+  &__table {
+    .ant-pagination {
+      li,
+      li > button {
+        border-radius: 50%;
+      }
+
+      & > :not(li:first-child),
+      & > :not(li:last-child) {
+        border: none;
+      }
+
+      .ant-pagination-item:hover {
+        border-color: #2ae9dd;
+      }
+
+      .ant-pagination-item-active {
+        background-color: #2ae9dd;
+        a {
+          color: white;
+        }
+      }
+    }
+  }
+}

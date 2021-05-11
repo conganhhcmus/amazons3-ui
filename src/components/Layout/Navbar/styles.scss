@@ -37,8 +37,8 @@
     }
 
     .ant-dropdown-menu-item {
-      padding-top: 10px;
-      padding-bottom: 10px;
+      padding-top: 5px;
+      padding-bottom: 5px;
 
       color: #8a9097;
     }
@@ -48,5 +48,8 @@
 .navbar__search {
   span:first-child {
     border-radius: 5px;
+  }
+  svg {
+    margin-left: 0px;
   }
 }
