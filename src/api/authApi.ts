@@ -1,9 +1,8 @@
-import { AxiosRequestConfig } from 'axios';
 import axiosClient from './axiosClient';
 
 const authApi = {
   loginRootUser: (username: string, password: string): Promise<{ accessToken: string; msg: string }> => {
-    const url = '/auth/login-root';
+    const url = 'api/v1/auth/login-root';
     const body = {
       username,
       password,
@@ -16,7 +15,7 @@ const authApi = {
     username: string,
     password: string,
   ): Promise<{ accessToken: string; msg: string }> => {
-    const url = '/auth/login-iam';
+    const url = 'api/v1/auth/login-iam';
     const body = {
       rootUsername,
       username,
@@ -26,13 +25,13 @@ const authApi = {
     return axiosClient.post(url, body);
   },
 
-  registerRootUser: (username: string, password: string, confirmPassword: string): Promise<AxiosRequestConfig> => {
-    const url = 'auth/register-root';
+  registerRootUser: (username: string, password: string, email: string): Promise<{ success: boolean }> => {
+    const url = 'api/v1/auth/root-users';
 
     const body = {
       username,
       password,
-      confirmPassword,
+      email,
     };
 
     return axiosClient.post(url, body);

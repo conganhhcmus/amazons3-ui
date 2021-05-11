@@ -12,6 +12,7 @@ import ResetPassword from './features/Auth/pages/ResetPassword';
 import Register from './features/Auth/pages/Register';
 import Layout from 'components/Layout';
 import Bucket from 'features/Bucket';
+import PrivateRoute from 'components/PrivateRoute';
 
 function App(): JSX.Element {
   return (
@@ -24,8 +25,8 @@ function App(): JSX.Element {
 
           <Layout>
             <Switch>
-              <PublicRoute path="/buckets" component={Bucket} />
-              <PublicRoute path="/users" component={User} />
+              <PrivateRoute path="/buckets" component={Bucket} />
+              <PrivateRoute path="/users" component={User} />
               <Redirect from="/" to="/buckets" />
             </Switch>
           </Layout>
