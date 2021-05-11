@@ -6,15 +6,15 @@ export interface user {
   permisstion: number;
   accessKeyAge: string;
   passwordAge: string;
-  lastAcctivity: string;
+  lastActivity: string;
 }
 const dummyData= range(0,15,1).map((index: number)=>({
   id: index,
-  userName: ` username ${index}`,
+  userName: ` dummy ${random(1,60)}`,
   permisstion: random(1,4),
   accessKeyAge: `${random(1,30)} day agos`,
   passwordAge: `${random(1,30)} day agos`,
-  lastAcctivity: `${random(1,30)} day agos`
+  lastActivity: `${random(1,30)} day agos`
 }))
 const initialState = {
   createIamUser: {
@@ -28,7 +28,7 @@ const initialState = {
     permisstion: '',
     accessKeyAge: '',
     passwordAge: '',
-    lastAcctivity: ''
+    lastActivity: ''
   },
   listUser: dummyData,
   searchIamUser: '',
@@ -67,8 +67,8 @@ const sortIncrease=(data: Array<user>, key: number)=>{
     break
   case 5:
     data.sort((a,b)=>{
-      if(a.lastAcctivity<b.lastAcctivity) return -1
-      if(a.lastAcctivity>b.lastAcctivity) return 1
+      if(a.lastActivity<b.lastActivity) return -1
+      if(a.lastActivity>b.lastActivity) return 1
       return 0
     })
     break
@@ -131,11 +131,11 @@ const handleSort =(data: Array<user>, key: number)=>{
     }
     if(key==5){
       for(let i=1; i< data.length;i++){
-        if(data[0].lastAcctivity !=data[i].lastAcctivity && data[0].lastAcctivity> data[i].lastAcctivity){
+        if(data[0].lastActivity !=data[i].lastActivity && data[0].lastActivity> data[i].lastActivity){
           sortIncrease(data,key)
           break
         }
-        if(data[0].lastAcctivity !=data[i].lastAcctivity && data[0].lastAcctivity< data[i].lastAcctivity){
+        if(data[0].lastActivity !=data[i].lastActivity && data[0].lastActivity< data[i].lastActivity){
           sortDecrease(data,key)
           break
         }
@@ -168,7 +168,6 @@ const userListSlice = createSlice({
       }
     },
     searchUser: (state,action)=>{
-      console.log(action)
       state.searchIamUser=action.payload
     }
 

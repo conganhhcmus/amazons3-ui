@@ -4,8 +4,9 @@ import { useDispatch,connect } from 'react-redux';
 import { editIamUser,editIamUserFormChange } from 'app/userlist/userliststore'
 import {  Input as Input1 } from 'antd';
 import {Iuserstate} from '../UserList/index'
-import { EyeTwoTone } from '@ant-design/icons';
 import {user} from 'app/userlist/userliststore'
+import IconView from 'assets/icon/IconView';
+
 interface Ioption{
   key: string,
   value: number,
@@ -47,10 +48,12 @@ function Userdetailmodal(props: userdetail): JSX.Element {
       onOpen={() => setOpen(true)}
       open={open}
       trigger={
-        <EyeTwoTone twoToneColor='#2AE9DD'  
-          style={{ fontSize: '25px', marginRight: '10px',cursor:'pointer' }}
+        <div 
+          style={{ marginRight: '10px',cursor:'pointer' }}
           onClick={()=>dispatch(editIamUser(editUser))}
-        />
+        >
+          <IconView />
+        </div>
       }
     >
       <Modal.Header>View & edit user</Modal.Header>
