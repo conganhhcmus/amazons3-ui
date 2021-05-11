@@ -32,8 +32,8 @@ function Login(): JSX.Element {
       authApi
         .loginRootUser(username, password)
         .then((res) => {
-          const { accessToken } = res;
-          if (!accessToken) throw new Error(res?.msg || '');
+          const { accessToken } = res?.data;
+          if (!accessToken) throw new Error(res?.data?.msg || '');
           dispatch(saveToken(accessToken));
           setIsSubmitting(false);
           message.success('Successful logged in');
@@ -48,8 +48,8 @@ function Login(): JSX.Element {
       authApi
         .loginUser(rootUsername, username, password)
         .then((res) => {
-          const { accessToken } = res;
-          if (!accessToken) throw new Error(res?.msg || '');
+          const { accessToken } = res?.data;
+          if (!accessToken) throw new Error(res?.data?.msg || '');
           dispatch(saveToken(accessToken));
           setIsSubmitting(false);
           message.success('Successful logged in');

@@ -3,29 +3,21 @@ import { FilterValue, SorterResult } from 'antd/lib/table/interface';
 import IconTrash from 'assets/icon/IconTrash';
 import IconView from 'assets/icon/IconView';
 import 'features/Bucket/components/BucketTable/styles.scss';
+import { IBucket } from 'features/Bucket/pages/BucketList';
 import React, { ChangeEvent } from 'react';
-
-export interface IBucketRow {
-  id: number;
-  name: string;
-  region: string;
-  user: string;
-  createDate: string;
-  lastActivity: string;
-}
 
 interface IBucketTable {
   loading: boolean;
-  data: IBucketRow[];
+  data: IBucket[];
   onSearch: (e: ChangeEvent<HTMLInputElement>) => void;
   onChange: (
     pagination: TablePaginationConfig,
     filter: Record<string, FilterValue | null>,
-    sorter: SorterResult<IBucketRow> | SorterResult<IBucketRow>[],
+    sorter: SorterResult<IBucket> | SorterResult<IBucket>[],
   ) => void;
-  onSelect: (selectedRowKeys: React.Key[], selectedRows: IBucketRow[]) => void;
-  onViewDetail: (id: number) => void;
-  onDelete: (id: number) => void;
+  onSelect: (selectedRowKeys: React.Key[], selectedRows: IBucket[]) => void;
+  onViewDetail: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
 function BucketTable(props: IBucketTable): JSX.Element {
@@ -68,7 +60,7 @@ function BucketTable(props: IBucketTable): JSX.Element {
       title: 'Action',
       width: '80px',
       // eslint-disable-next-line react/display-name
-      render: (record: IBucketRow) => (
+      render: (record: IBucket) => (
         <div className="d-flex justify-content-around align-items-center">
           <div className="cursor-pointer" onClick={() => onViewDetail(record?.id)}>
             <IconView />

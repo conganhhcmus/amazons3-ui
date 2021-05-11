@@ -3,14 +3,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export interface IRegisterValues {
-  userName: string;
+  username: string;
   email: string;
   password: string;
   confirmPassword: string;
 }
 
 const initialValues: IRegisterValues = {
-  userName: '',
+  username: '',
   email: '',
   password: '',
   confirmPassword: '',
@@ -29,7 +29,7 @@ function RegisterForm(props: IProps): JSX.Element {
     <Form form={form} name="register" initialValues={initialValues} onFinish={onSubmit}>
       <div>
         <p className="label required">Username</p>
-        <Form.Item name="userName" rules={[{ required: true, message: 'Please input your username' }]}>
+        <Form.Item name="username" rules={[{ required: true, message: 'Please input your username' }]}>
           <Input size="large" />
         </Form.Item>
       </div>

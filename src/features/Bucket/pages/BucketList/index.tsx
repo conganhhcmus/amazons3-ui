@@ -1,16 +1,17 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import 'features/Bucket/pages/BucketList/styles.scss';
 import HeaderPage from 'components/HeaderPage';
-import BucketTable, { IBucketRow } from 'features/Bucket/components/BucketTable';
+import BucketTable from 'features/Bucket/components/BucketTable';
 import { range } from 'lodash';
 import { Button, Form, Input, message, TablePaginationConfig } from 'antd';
 import { FilterValue, SorterResult } from 'antd/lib/table/interface';
 import { SearchOutlined } from '@ant-design/icons';
 import ModalCreateBucket from 'features/Bucket/components/ModalCreateBucket';
 import { useHistory } from 'react-router';
+// import bucketApi from 'api/bucketApi';
 
 const dummyData = range(0, 30, 1).map((index: number) => ({
-  id: index,
+  id: `${index}`,
   name: `Bucket name ${index}`,
   region: `Region ${index}`,
   user: `User ${index}`,
@@ -18,13 +19,36 @@ const dummyData = range(0, 30, 1).map((index: number) => ({
   lastActivity: '01/01/2021',
 }));
 
+export interface IBucket {
+  id: string;
+  name: string;
+  region: string;
+  user: string;
+  createDate: string;
+  lastActivity: string;
+}
+
 function BucketList(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedBucketKeys, setSelectedBucketKeys] = useState<React.Key[]>([]);
   const [visibleModalCreate, setVisibleModalCreate] = useState<boolean>(false);
+  // const [buckets, setBuckets] = useState<IBucket[]>([]);
 
   const [createBucketForm] = Form.useForm();
   const history = useHistory();
+
+  useEffect(() => {
+    //Todo: Call api to get bucket list
+    // bucketApi.getBuckets().then((res: { data: IBucket[] }) => {
+    //   const { data } = res;
+    //   setBuckets(data);
+    //   setLoading(false);
+    // });
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  }, []);
 
   //Create bucket
   const toggleModalCreate = () => {
@@ -50,13 +74,6 @@ function BucketList(): JSX.Element {
 
   //Search
   let timeout: NodeJS.Timeout;
-  useEffect(() => {
-    //Todo: Call api to get bucket list
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  }, []);
-
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     const {
       target: { value },
@@ -70,7 +87,7 @@ function BucketList(): JSX.Element {
   };
 
   //Table
-  const handleSelect = (selectedRowKeys: React.Key[], selectedRows: IBucketRow[]): void => {
+  const handleSelect = (selectedRowKeys: React.Key[], selectedRows: IBucket[]): void => {
     console.log('🚀 ~ file: index.tsx ~ line 58 ~ handleChangeSelect ~ selectedRows', selectedRows);
     console.log('🚀 ~ file: index.tsx ~ line 58 ~ handleChangeSelect ~ selectedRowKeys', selectedRowKeys);
     setSelectedBucketKeys(selectedRowKeys);
@@ -79,17 +96,17 @@ function BucketList(): JSX.Element {
   const handleChange = (
     pagination: TablePaginationConfig,
     filter: Record<string, FilterValue | null>,
-    sorter: SorterResult<IBucketRow> | SorterResult<IBucketRow>[],
+    sorter: SorterResult<IBucket> | SorterResult<IBucket>[],
   ): void => {
     console.log('🚀 ~ file: index.tsx ~ line 72 ~ handleChange ~ pagination', pagination);
     console.log('🚀 ~ file: index.tsx ~ line 72 ~ handleChange ~ sorter', sorter);
   };
 
-  const handleViewBucket = (id: number): void => {
+  const handleViewBucket = (id: string): void => {
     history.push(`/buckets/${id}`);
   };
 
-  const handleDeleteBucket = (id: number): void => {
+  const handleDeleteBucket = (id: string): void => {
     message.info(`Delete bucket id = ${id}`);
   };
 
