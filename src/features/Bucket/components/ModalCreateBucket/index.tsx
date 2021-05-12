@@ -12,12 +12,12 @@ interface IModalCreateBucket {
 }
 
 interface ICreateBucketForm {
-  name: string;
+  bucketName: string;
   region: string;
 }
 
 const initialValues: ICreateBucketForm = {
-  name: '',
+  bucketName: '',
   region: '',
 };
 
@@ -41,7 +41,11 @@ function ModalCreateBucket(props: IModalCreateBucket): JSX.Element {
       ]}
     >
       <Form form={form} initialValues={initialValues} labelCol={{ span: 6 }} onFinish={onOk}>
-        <Form.Item label="Bucket name" name="name" rules={[{ required: true, message: 'Please input bucket name' }]}>
+        <Form.Item
+          label="Bucket name"
+          name="bucketName"
+          rules={[{ required: true, message: 'Please input bucket name' }]}
+        >
           <Input />
         </Form.Item>
         <Form.Item label="Region" name="region" rules={[{ required: true, message: 'Please choose region' }]}>
