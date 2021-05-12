@@ -3,25 +3,23 @@ import 'features/Auth/pages/Login/styles.scss';
 import { Card, Form, message } from 'antd';
 import RegisterForm, { IRegisterValues } from 'features/Auth/components/RegisterForm';
 import authApi from 'api/authApi';
+import { useHistory } from 'react-router';
 
 function Register(): JSX.Element {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const [registerForm] = Form.useForm();
+  const history = useHistory();
 
   const handleRegister = (values: IRegisterValues) => {
     setIsSubmitting(true);
-
+    const { username, password, email } = values;
     authApi
-      .registerRootUser(values.userName, values.password, values.confirmPassword)
-      .then((res) => {
-        console.log('🚀 ~ file: index.tsx ~ line 36 ~ .then ~ res', res);
-        // if (res.statusCode === 201) {
-        //   message.success('Register successful!');
-        // } else if (res.statusCode === 200) {
-        //   message.error('Username is already exist!');
-        // }
+      .registerRootUser(username, password, email)
+      .then(() => {
         setIsSubmitting(false);
+        history.push('/login');
+        message.success('Successful registered. Please login!');
       })
       .catch((err: Error) => {
         setIsSubmitting(false);

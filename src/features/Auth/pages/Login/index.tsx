@@ -8,7 +8,7 @@ import IconRootUser from 'assets/icon/IconRootUser';
 import IconUser from 'assets/icon/IconUser';
 import authApi from 'api/authApi';
 import { useDispatch } from 'react-redux';
-import { saveToken } from 'app/userSlice';
+import { saveToken, saveUserInfo } from 'app/userSlice';
 
 function Login(): JSX.Element {
   const [currentTypeUser, setCurrentTypeUser] = useState<number>(ETypeUser.rootUser);
@@ -32,8 +32,12 @@ function Login(): JSX.Element {
       authApi
         .loginRootUser(username, password)
         .then((res) => {
-          const { accessToken } = res;
-          if (!accessToken) throw new Error(res?.msg || '');
+          const { accessToken } = res?.data;
+          if (!accessToken) throw new Error(res?.data?.msg || '');
+          const userInfoEncode = accessToken.split('.')[1];
+          const userInfoDecode = new Buffer(userInfoEncode, 'base64').toString();
+          const userInfoParsed = JSON.parse(userInfoDecode);
+          dispatch(saveUserInfo(userInfoParsed));
           dispatch(saveToken(accessToken));
           setIsSubmitting(false);
           message.success('Successful logged in');
@@ -48,8 +52,12 @@ function Login(): JSX.Element {
       authApi
         .loginUser(rootUsername, username, password)
         .then((res) => {
-          const { accessToken } = res;
-          if (!accessToken) throw new Error(res?.msg || '');
+          const { accessToken } = res?.data;
+          if (!accessToken) throw new Error(res?.data?.msg || '');
+          const userInfoEncode = accessToken.split('.')[1];
+          const userInfoDecode = new Buffer(userInfoEncode, 'base64').toString();
+          const userInfoParsed = JSON.parse(userInfoDecode);
+          dispatch(saveUserInfo(userInfoParsed));
           dispatch(saveToken(accessToken));
           setIsSubmitting(false);
           message.success('Successful logged in');
