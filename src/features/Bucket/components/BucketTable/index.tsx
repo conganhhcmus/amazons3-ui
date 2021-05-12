@@ -30,6 +30,8 @@ function BucketTable(props: IBucketTable): JSX.Element {
       fixed: true,
       sorter: true,
       sortDirection: ['descend', 'ascend'],
+      // eslint-disable-next-line react/display-name
+      render: (text: string, record: IBucket) => <a onClick={() => onViewDetail(record?.id)}>{text}</a>,
     },
     {
       title: 'Region',
