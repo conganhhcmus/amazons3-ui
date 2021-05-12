@@ -1,4 +1,4 @@
-import { Table, TablePaginationConfig } from 'antd';
+import { Popconfirm, Table, TablePaginationConfig } from 'antd';
 import { FilterValue, SorterResult } from 'antd/lib/table/interface';
 import IconTrash from 'assets/icon/IconTrash';
 import IconView from 'assets/icon/IconView';
@@ -65,9 +65,16 @@ function BucketTable(props: IBucketTable): JSX.Element {
           <div className="cursor-pointer" onClick={() => onViewDetail(record?.id)}>
             <IconView />
           </div>
-          <div className="cursor-pointer" onClick={() => onDelete(record?.id)}>
-            <IconTrash />
-          </div>
+          <Popconfirm
+            title="Are you sure to delete?"
+            onConfirm={() => onDelete(record?.id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <div className="cursor-pointer">
+              <IconTrash />
+            </div>
+          </Popconfirm>
         </div>
       ),
     },

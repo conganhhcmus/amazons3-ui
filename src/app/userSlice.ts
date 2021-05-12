@@ -3,8 +3,12 @@ import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
+const userInfoLocalStorage = localStorage.getItem('userInfo');
+const userInfoInit = userInfoLocalStorage ? JSON.parse(userInfoLocalStorage) : null;
+
 const initialState = {
   token: cookies.get('token') || null,
+  userInfo: userInfoInit,
 };
 
 const userSlice = createSlice({
@@ -19,9 +23,13 @@ const userSlice = createSlice({
       state.token = null;
       cookies.remove('token', { path: '/' });
     },
+    saveUserInfo: (state, action) => {
+      state.userInfo = action.payload;
+      localStorage.setItem('userInfo', JSON.stringify(action.payload));
+    },
   },
 });
 
 const { reducer, actions } = userSlice;
-export const { saveToken, removeToken } = actions;
+export const { saveToken, removeToken, saveUserInfo } = actions;
 export default reducer;

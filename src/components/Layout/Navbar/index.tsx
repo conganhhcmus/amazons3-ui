@@ -4,6 +4,8 @@ import 'components/Layout/Navbar/styles.scss';
 import AvatarCustom from 'components/AvatarCustom';
 import { Dropdown, Input, Menu } from 'antd';
 import IconArrowDown from 'assets/icon/IconArrowDown';
+import { useSelector } from 'react-redux';
+import { RootState } from 'app/store';
 
 interface INavbar {
   collapsed: boolean;
@@ -13,6 +15,7 @@ interface INavbar {
 
 function Navbar(props: INavbar): JSX.Element {
   const { collapsed, toggle, onLogout } = props;
+  const { userInfo } = useSelector((state: RootState) => state.user);
 
   const menu = (
     <Menu>
@@ -34,7 +37,7 @@ function Navbar(props: INavbar): JSX.Element {
       </div>
       <Dropdown overlayClassName="navbar__dropdown" overlay={menu} placement="bottomRight" arrow trigger={['click']}>
         <div className="navbar__avatar">
-          <AvatarCustom name="Phuc" />
+          <AvatarCustom name={userInfo?.userName?.toUpperCase()} />
           <IconArrowDown />
         </div>
       </Dropdown>
