@@ -37,8 +37,8 @@ function Login(): JSX.Element {
           const userInfoEncode = accessToken.split('.')[1];
           const userInfoDecode = new Buffer(userInfoEncode, 'base64').toString();
           const userInfoParsed = JSON.parse(userInfoDecode);
-          dispatch(saveToken(accessToken));
           dispatch(saveUserInfo(userInfoParsed));
+          dispatch(saveToken(accessToken));
           setIsSubmitting(false);
           message.success('Successful logged in');
         })
@@ -54,6 +54,10 @@ function Login(): JSX.Element {
         .then((res) => {
           const { accessToken } = res?.data;
           if (!accessToken) throw new Error(res?.data?.msg || '');
+          const userInfoEncode = accessToken.split('.')[1];
+          const userInfoDecode = new Buffer(userInfoEncode, 'base64').toString();
+          const userInfoParsed = JSON.parse(userInfoDecode);
+          dispatch(saveUserInfo(userInfoParsed));
           dispatch(saveToken(accessToken));
           setIsSubmitting(false);
           message.success('Successful logged in');
