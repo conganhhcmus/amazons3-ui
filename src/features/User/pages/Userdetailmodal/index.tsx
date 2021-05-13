@@ -14,7 +14,8 @@ interface Ioption{
 }
 interface userdetail{
   editUser:user,
-  user:user
+  user:user,
+  username?:string
 }
 const Options: Ioption[]=[
   {
@@ -41,19 +42,22 @@ const Options: Ioption[]=[
 function Userdetailmodal(props: userdetail): JSX.Element {
   const [open, setOpen] = React.useState<boolean>(false)
   const dispatch = useDispatch()
-  const { editUser,user }=props
+  const { editUser,user,username }=props
   return (
     <Modal
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
       open={open}
       trigger={
-        <div 
-          style={{ marginRight: '10px',cursor:'pointer' }}
-          onClick={()=>dispatch(editIamUser(editUser))}
-        >
-          <IconView />
-        </div>
+        (username)?(
+          <a onClick={()=>dispatch(editIamUser(editUser))}>{username}</a>
+        ):
+          (<div 
+            style={{ marginRight: '10px',cursor:'pointer' }}
+            onClick={()=>dispatch(editIamUser(editUser))}
+          >
+            <IconView />
+          </div>)
       }
     >
       <Modal.Header>View & edit user</Modal.Header>

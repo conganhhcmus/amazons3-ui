@@ -1,8 +1,8 @@
 import React from 'react'
-import { Button, Modal,Dropdown } from 'semantic-ui-react'
+import { Modal,Dropdown,Button } from 'semantic-ui-react'
 import { useDispatch } from 'react-redux';
 import { createIamUser } from 'app/userlist/userliststore'
-import {  Input } from 'antd';
+import {  Input, Button as Button1} from 'antd';
 interface Ioption{
   key: string,
   value: string,
@@ -38,7 +38,9 @@ function Createusermodal(): JSX.Element {
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
       open={open}
-      trigger={<Button className='user__create__btn custom__btn'>Create</Button>}
+      trigger={<Button1 className="ml-2" type="primary">
+        Create
+      </Button1>}
     >
       <Modal.Header>Create user</Modal.Header>
       <Modal.Content >

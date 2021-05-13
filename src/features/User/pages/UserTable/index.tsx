@@ -14,7 +14,7 @@ interface IUserTable{
     filter: Record<string, FilterValue | null>,
     sorter: SorterResult<user> | SorterResult<user>[],
   ) => void;
-  onSelect: (selectedRowKeys: React.Key[], selectedRows: user[]) => void;
+  onSelect: (selectedRowKeys: React.Key[]) => void;
   data: user[];
 }
 
@@ -31,7 +31,11 @@ function Usertable(props: IUserTable): JSX.Element {
         return 0
       },
       sortDirection: ['ascend', 'descend', 'ascend'],
-      
+      // eslint-disable-next-line react/display-name
+      render: (username: string,record: user)=>(
+        // <a>{record}</a>
+        <Userdetailmodal editUser={record} user={record} username={username} />
+      )
     },
     {
       title: 'Permisstion',
@@ -44,7 +48,7 @@ function Usertable(props: IUserTable): JSX.Element {
       sortDirection: ['ascend', 'descend', 'ascend'],
       // eslint-disable-next-line react/display-name
       render: (record: number) =>(
-        <div style={{ height:' 80%' }}>
+        <div>
           {record===1 && <div className='fullaccess'>Full access</div>}
           {record==2 && <div className='readonly'>Read only</div>}
           {record==3 && <div className='writeonly'>Write only</div>}

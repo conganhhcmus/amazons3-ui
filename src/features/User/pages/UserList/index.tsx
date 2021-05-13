@@ -1,14 +1,15 @@
 import React,{ useState,useEffect} from 'react';
 import { SearchOutlined } from '@ant-design/icons';
-import {  Input,TablePaginationConfig } from 'antd';
+import {  Input,TablePaginationConfig,Popconfirm } from 'antd';
 import './userlist.css'
-import { Button as Button1,message} from 'antd';
+import { Button,message} from 'antd';
 import { useDispatch,connect } from 'react-redux';
-import {searchUser } from 'app/userlist/userliststore'
+import {searchUser,deleteMulUser,deleteUser } from 'app/userlist/userliststore'
 import {user} from 'app/userlist/userliststore'
 import Createusermodal from '../Createusermodal/index'
 import Usertable from '../UserTable';
 import { SorterResult } from 'antd/lib/table/interface';
+
 export interface Iuserstate{
   user: {
     token: string
@@ -40,10 +41,10 @@ function UserList(props:Iuserlist): JSX.Element {
   const dispatch = useDispatch()
   const {fake1}=props
   const handleDeleteUser = (id: number): void => {
+    dispatch(deleteUser(id))
     message.info(`Delete user id = ${id}`);
   }
-  const handleSelect = (selectedRowKeys: React.Key[], selectedRows: user[]): void => {
-    console.log('🚀 ~ file: index.tsx ~ line 58 ~ handleChangeSelect ~ selectedRows', selectedRows);
+  const handleSelect = (selectedRowKeys: React.Key[]): void => {
     console.log('🚀 ~ file: index.tsx ~ line 58 ~ handleChangeSelect ~ selectedRowKeys', selectedRowKeys);
     setSelectedIamUser(selectedRowKeys);
   };
@@ -54,30 +55,33 @@ function UserList(props:Iuserlist): JSX.Element {
     console.log('🚀 ~ file: index.tsx ~ line 72 ~ handleChange ~ pagination', pagination);
     console.log('🚀 ~ file: index.tsx ~ line 72 ~ handleChange ~ sorter', sorter);
   };
-  const handleDeleteMulBucket = () => {
+  const handleDeleteMulUser = () => {
     if (!selectedIamUser.length) {
       message.warning('Please select at least one bucket');
       return;
     }
-    console.log('Delete: ');
-    console.log({ selectedIamUser });
-    message.info('Delete multi bucket');
-  };
+    dispatch(deleteMulUser(selectedIamUser))
+    message.info('Delete multi IamUSer');
+  }
   return(
     <div>
       <div>User List Page</div>
-      <div className='user__header'>
-        <Input size="large" placeholder="Search..." 
-          prefix={<SearchOutlined />} className='user__search'
-          onChange={e=>dispatch(searchUser(e.target.value.trim()))}
-        />
-        <div style={{width:'40%'}}/>
-        <Createusermodal />
-        <Button1 type="primary" htmlType="submit" onClick={handleDeleteMulBucket}
-          className="w-100 user__delete__btn" size="large" id='delete__btn' 
-        >
-          Delete
-        </Button1>
+      <div className="bucket-table-container">
+        <div className="d-flex justify-content-between">
+          <div className="bucket-table-container__search">
+            <Input size="large" placeholder="Search..." prefix={<SearchOutlined />} onChange={e=>dispatch(searchUser(e.target.value.trim()))} />
+          </div>
+          <div className="bucket-table-container__actions">
+            <Popconfirm title="Are you sure to delete?" onConfirm={handleDeleteMulUser} okText="Yes" cancelText="No">
+              <Button type="primary" danger>
+                Delete
+              </Button>
+            </Popconfirm>
+            <Createusermodal />
+          </div>
+        </div>
+        <div className="mt-4">
+        </div>
       </div>
       <div style={{ marginTop: '40px' }}>
         <Usertable 
