@@ -1,21 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { random, range } from 'lodash';
 export interface user {
-  id: number;
-  userName: string;
-  permisstion: number;
-  accessKeyAge: string;
-  passwordAge: string;
-  lastActivity: string;
+  iamTokens: {
+    publicToken:string,
+    privateToken:string
+  },
+  permission: number,
+  _id:string,
+  username:string,
+  password:string,
+  owner:string
 }
-const dummyData = range(0, 15, 1).map((index: number) => ({
-  id: index,
-  userName: ` dummy ${random(1, 60)}`,
-  permisstion: random(1, 4),
-  accessKeyAge: `${random(1, 30)} day agos`,
-  passwordAge: `${random(1, 30)} day agos`,
-  lastActivity: `${random(1, 30)} day agos`
-}))
 const initialState = {
   createIamUser: {
     userName: '',
@@ -25,12 +20,12 @@ const initialState = {
   editIamUser: {
     id: '',
     userName: '',
-    permisstion: '',
+    permisstion: 0,
     accessKeyAge: '',
     passwordAge: '',
     lastActivity: ''
   },
-  listUser: dummyData,
+  listUser: '',
 }
 
 const userListSlice = createSlice({
@@ -54,22 +49,24 @@ const userListSlice = createSlice({
     },
     searchUser: (state, {payload}) => {
       if(payload.trim().length==0){
-        console.log('full list');
         state.listUser= initialState.listUser
       }
       else{
         console.log('search')
-        state.listUser=state.listUser.filter(data=>data.userName.includes(payload))
+        // state.listUser=state.listUser.filter(data=>data.userName.includes(payload))
       }
     },
     deleteMulUser: (state, { payload }) => {
-      for (let i = 0; i < payload.length; i++) {
-        state.listUser = state.listUser.filter(data => data.id !== payload[i])
-      }
+      // for (let i = 0; i < payload.length; i++) {
+      //   state.listUser = state.listUser.filter(data => data.id !== payload[i])
+      // }
     },
     deleteUser: (state, { payload }) => {
-      state.listUser = state.listUser.filter(data => data.id !== payload)
+      // state.listUser = state.listUser.filter(data => data.id !== payload)
     },
+    getListIamUser:(state,{payload})=>{
+      state.listUser=payload
+    }
   },
 });
 
@@ -80,5 +77,6 @@ export const { createIamUser,
   searchUser,
   deleteMulUser, 
   deleteUser, 
+  getListIamUser
 } = actions
 export default reducer

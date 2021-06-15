@@ -8,7 +8,7 @@ import '../UserList/userlist.css'
 import { CheckCircleTwoTone } from '@ant-design/icons';
 interface IUserTable{
   loading: boolean
-  onDelete: (id: number) => void
+  onDelete: (id: string) => void
   onChange: (
     pagination: TablePaginationConfig,
     filter: Record<string, FilterValue | null>,
@@ -23,11 +23,11 @@ function Usertable(props: IUserTable): JSX.Element {
   const columns = [
     {
       title: 'User Name',
-      dataIndex: 'userName',
+      dataIndex: 'username',
       fixed: true,
       sorter: (a:user, b:user) => {
-        if(a.userName> b.userName) return 1
-        if(a.userName< b.userName) return -1
+        if(a.username> b.username) return 1
+        if(a.username< b.username) return -1
         return 0
       },
       sortDirection: ['ascend', 'descend', 'ascend'],
@@ -39,10 +39,10 @@ function Usertable(props: IUserTable): JSX.Element {
     },
     {
       title: 'Permisstion',
-      dataIndex: 'permisstion',
+      dataIndex: 'permission',
       sorter: (a:user, b:user) => {
-        if(a.permisstion> b.permisstion) return 1
-        if(a.permisstion< b.permisstion) return -1
+        if(a.permission> b.permission) return 1
+        if(a.permission< b.permission) return -1
         return 0
       },
       sortDirection: ['ascend', 'descend', 'ascend'],
@@ -58,11 +58,11 @@ function Usertable(props: IUserTable): JSX.Element {
     },
     {
       title: 'Access key age',
-      dataIndex: 'accessKeyAge',
+      dataIndex: 'publicToken',
       sortDirection: ['ascend', 'descend', 'ascend'],
       sorter: (a:user, b:user) => {
-        if(a.accessKeyAge> b.accessKeyAge) return 1
-        if(a.accessKeyAge< b.accessKeyAge) return -1
+        if(a.iamTokens.publicToken> b.iamTokens.publicToken) return 1
+        if(a.iamTokens.publicToken< b.iamTokens.publicToken) return -1
         return 0
       },
       // eslint-disable-next-line react/display-name
@@ -75,21 +75,21 @@ function Usertable(props: IUserTable): JSX.Element {
     },
     {
       title: 'Password age',
-      dataIndex: 'passwordAge',
+      dataIndex: 'password',
       sortDirection: ['ascend', 'descend', 'ascend'],
       sorter: (a:user, b:user) => {
-        if(a.passwordAge> b.passwordAge) return 1
-        if(a.passwordAge< b.passwordAge) return -1
+        if(a.password> b.password) return 1
+        if(a.password< b.password) return -1
         return 0
       },
     },
     {
       title: 'Last activity',
-      dataIndex: 'lastActivity',
+      dataIndex: 'owner',
       sortDirection: ['ascend', 'descend', 'ascend'],
       sorter: (a:user, b:user) => {
-        if(a.lastActivity> b.lastActivity) return 1
-        if(a.lastActivity< b.lastActivity) return -1
+        if(a.owner> b.owner) return 1
+        if(a.owner< b.owner) return -1
         return 0
       },
     },
@@ -100,7 +100,7 @@ function Usertable(props: IUserTable): JSX.Element {
       render: (record: user) => (
         <div className="d-flex justify-content-around align-items-center">
           <Userdetailmodal editUser={record} user={record} />
-          <div style={{ cursor: 'pointer' }} onClick={() => onDelete(record?.id)}>
+          <div style={{ cursor: 'pointer' }} onClick={() => onDelete(record?._id)}>
             <IconTrash />
           </div>
         </div>

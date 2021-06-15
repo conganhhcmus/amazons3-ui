@@ -4,12 +4,12 @@ import {  Input,TablePaginationConfig,Popconfirm } from 'antd';
 import './userlist.css'
 import { Button,message} from 'antd';
 import { useDispatch,connect } from 'react-redux';
-import {searchUser,deleteMulUser,deleteUser } from 'app/userlist/userliststore'
+import {searchUser,deleteMulUser,deleteUser,getListIamUser } from 'app/userlist/userliststore'
 import {user} from 'app/userlist/userliststore'
 import Createusermodal from '../Createusermodal/index'
 import Usertable from '../UserTable';
 import { SorterResult } from 'antd/lib/table/interface';
-
+import rootUserApi from 'api/rootuserApi';
 export interface Iuserstate{
   user: {
     token: string
@@ -18,7 +18,7 @@ export interface Iuserstate{
     createIamUser:{
       userName: string,
       passWord: string,
-      permisstion: string
+      permisstion: number
     },
     listUser:user[],
     editIamUser:user,
@@ -26,21 +26,23 @@ export interface Iuserstate{
   }
 }
 interface Iuserlist {
-  fake1:user[]
+  list:user[]
 }
 function UserList(props:Iuserlist): JSX.Element {
   const [loading, setLoading] = useState<boolean>(true)
   const [selectedIamUser, setSelectedIamUser] = useState<React.Key[]>([]);
 
   useEffect(() => {
-    //Todo: Call api to get bucket list
     setTimeout(() => {
       setLoading(false);
     }, 1000);
+    rootUserApi
+      .getListIamUser()
+      .then(res=>dispatch(getListIamUser(res.user)))
   }, []);
   const dispatch = useDispatch()
-  const {fake1}=props
-  const handleDeleteUser = (id: number): void => {
+  const {list}=props
+  const handleDeleteUser = (id: string): void => {
     dispatch(deleteUser(id))
     message.info(`Delete user id = ${id}`);
   }
@@ -89,14 +91,14 @@ function UserList(props:Iuserlist): JSX.Element {
           onDelete={handleDeleteUser}
           onChange={handleChange}
           onSelect={handleSelect}
-          data={fake1}
+          data={list}
         />
       </div>
     </div>
   ) 
 }
 const mapStatetoProps= (state: Iuserstate)=>({
-  fake1:state.userlistReducer.listUser,
+  list:state.userlistReducer.listUser,
   searchIamUser: state.userlistReducer.searchIamUser
 })
 export default connect(mapStatetoProps,null)(UserList);

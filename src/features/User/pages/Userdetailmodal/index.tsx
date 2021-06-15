@@ -6,7 +6,8 @@ import {  Input as Input1 } from 'antd';
 import {Iuserstate} from '../UserList/index'
 import {user} from 'app/userlist/userliststore'
 import IconView from 'assets/icon/IconView';
-
+import rootUserApi from 'api/rootuserApi';
+rootUserApi
 interface Ioption{
   key: string,
   value: number,
@@ -67,7 +68,7 @@ function Userdetailmodal(props: userdetail): JSX.Element {
             <div><span className='modal__span'>*</span>Username:</div>
             <div>
               <Input fluid placeholder="Username" 
-                value={user.userName}
+                value={user.username}
                 onChange={(e,data)=>dispatch(editIamUserFormChange({userName: data.value}))}
               />
             </div>
@@ -75,7 +76,7 @@ function Userdetailmodal(props: userdetail): JSX.Element {
             <div><span className='modal__span'>*</span>Password:</div>
             <div>
               <Input1.Password  placeholder="Password" 
-                value={user.passwordAge}
+                value={user.password}
                 onChange={e=>dispatch(editIamUserFormChange({passwordAge: e.target.value}))}
               />
             </div>
@@ -83,8 +84,9 @@ function Userdetailmodal(props: userdetail): JSX.Element {
             <div><span className='modal__span'>*</span>Permisstion:</div>
             <div>
               <Dropdown
-                value={editUser.permisstion}
+                value={editUser.permission}
                 onChange={(e,data)=>{
+                  console.log(data.value)
                   dispatch(editIamUserFormChange({permisstion: data.value}))
                 }}
                 fluid
@@ -126,10 +128,15 @@ function Userdetailmodal(props: userdetail): JSX.Element {
           Cancel
         </Button>
         <Button
-          content="Submit"
+          type='submit'
           labelPosition='right'
           icon='checkmark'
-          onClick={() => setOpen(false)}
+          onClick={() =>{
+            rootUserApi.getListIamUser()
+              .then(res=>console.log('ahuhu',res))
+              .then(()=>setOpen(false))
+          } 
+          }
           positive
         />
       </Modal.Actions>

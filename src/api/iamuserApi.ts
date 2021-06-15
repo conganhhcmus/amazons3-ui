@@ -13,7 +13,6 @@ const iamUserApi = {
       passWord,
       permisstion
     };
-
     return axiosClient.post(url, body);
   },
 
