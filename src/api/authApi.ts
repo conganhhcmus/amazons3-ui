@@ -1,21 +1,20 @@
-import axios from 'axios';
-// import axiosClient from './axiosClient';
+import axiosClient from './axiosClient';
 
 const authApi = {
-  loginRootUser: (username: string, password: string): Promise<{ data: { accessToken: string; msg: string } }> => {
+  loginRootUser: (username: string, password: string): Promise<{ accessToken: string; msg: string }> => {
     const url = 'https://authorization-service-s3.herokuapp.com/api/v1/auth/login-root';
     const body = {
       username,
       password,
     };
 
-    return axios.post(url, body);
+    return axiosClient.post(url, body);
   },
   loginUser: (
     rootUsername: string,
     username: string,
     password: string,
-  ): Promise<{ data: { accessToken: string; msg: string } }> => {
+  ): Promise<{ accessToken: string; msg: string }> => {
     const url = 'https://authorization-service-s3.herokuapp.com/api/v1/auth/login-iam';
     const body = {
       rootUsername,
@@ -23,7 +22,7 @@ const authApi = {
       password,
     };
 
-    return axios.post(url, body);
+    return axiosClient.post(url, body);
   },
 
   registerRootUser: (
@@ -39,7 +38,7 @@ const authApi = {
       email,
     };
 
-    return axios.post(url, body);
+    return axiosClient.post(url, body);
   },
 };
 

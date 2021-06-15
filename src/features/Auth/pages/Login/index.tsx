@@ -32,8 +32,8 @@ function Login(): JSX.Element {
       authApi
         .loginRootUser(username, password)
         .then((res) => {
-          const { accessToken } = res?.data;
-          if (!accessToken) throw new Error(res?.data?.msg || '');
+          const { accessToken } = res;
+          if (!accessToken) throw new Error(res?.msg || '');
           const userInfoEncode = accessToken.split('.')[1];
           const userInfoDecode = new Buffer(userInfoEncode, 'base64').toString();
           const userInfoParsed = JSON.parse(userInfoDecode);
@@ -52,8 +52,8 @@ function Login(): JSX.Element {
       authApi
         .loginUser(rootUsername, username, password)
         .then((res) => {
-          const { accessToken } = res?.data;
-          if (!accessToken) throw new Error(res?.data?.msg || '');
+          const { accessToken } = res;
+          if (!accessToken) throw new Error(res?.msg || '');
           const userInfoEncode = accessToken.split('.')[1];
           const userInfoDecode = new Buffer(userInfoEncode, 'base64').toString();
           const userInfoParsed = JSON.parse(userInfoDecode);
