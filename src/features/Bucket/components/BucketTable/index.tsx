@@ -23,7 +23,7 @@ interface IBucketTable {
 function BucketTable(props: IBucketTable): JSX.Element {
   const { loading = true, data = [], onChange, onSelect, onViewDetail, onDelete } = props;
 
-  const columns = [
+  const columns: any = [
     {
       title: 'Bucket name',
       dataIndex: 'name',
@@ -39,24 +39,28 @@ function BucketTable(props: IBucketTable): JSX.Element {
       sorter: true,
       sortDirection: ['descend', 'ascend'],
       width: '150px',
+      align: 'center',
     },
     {
       title: 'User create',
       dataIndex: 'user',
       sortDirection: ['descend', 'ascend'],
       sorter: true,
+      align: 'center',
     },
     {
       title: 'Create Date',
       dataIndex: 'createDate',
       sortDirection: ['descend', 'ascend'],
       sorter: true,
+      align: 'center',
     },
     {
       title: 'Last activity',
       dataIndex: 'lastActivity',
       sortDirection: ['descend', 'ascend'],
       sorter: true,
+      align: 'center',
     },
     {
       title: 'Action',
