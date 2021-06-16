@@ -133,8 +133,9 @@ function BucketDetail(): JSX.Element {
 
   const handleUploadFile = (e: any) => {
     const file = e.target.files[0];
-    objectApi.uploadFile(2, file, null).then((res: any) => {
-      console.log({ res });
+    objectApi.uploadFile(id, file, null).then((res: any) => {
+      console.log({ res })
+      setObjectsList([res]);
       message.success('Successful uploaded file');
     });
   };
