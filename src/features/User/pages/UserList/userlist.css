@@ -62,28 +62,28 @@
 .fullaccess {
   background-color: #2ae9dd;
   border-radius: 8px;
-  width: 40%;
+  width: 80%;
   text-align: center;
   height: 100%;
 }
 .readonly {
   background-color: #00c2ff;
   border-radius: 8px;
-  width: 40%;
+  width: 80%;
   text-align: center;
   height: 100%;
 }
 .writeonly {
   background-color: #fee074;
   border-radius: 8px;
-  width: 40%;
+  width: 80%;
   text-align: center;
   height: 100%;
 }
 .noaccess {
   background-color: #fd7d7d;
   border-radius: 8px;
-  width: 40%;
+  width: 80%;
   text-align: center;
   height: 100%;
 }

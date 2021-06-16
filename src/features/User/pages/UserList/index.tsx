@@ -1,14 +1,17 @@
 import React,{ useState,useEffect} from 'react';
 import { SearchOutlined } from '@ant-design/icons';
-import {  Input,TablePaginationConfig } from 'antd';
+import {  Input,TablePaginationConfig,Popconfirm } from 'antd';
 import './userlist.css'
-import { Button as Button1,message} from 'antd';
-import { useDispatch,connect } from 'react-redux';
-import {searchUser } from 'app/userlist/userliststore'
+import { Button,message} from 'antd';
+import { useDispatch,connect, useSelector } from 'react-redux';
+import {searchUser,deleteMulUser,deleteUser,getListIamUser } from 'app/userlist/userliststore'
 import {user} from 'app/userlist/userliststore'
 import Createusermodal from '../Createusermodal/index'
 import Usertable from '../UserTable';
 import { SorterResult } from 'antd/lib/table/interface';
+import rootUserApi from 'api/rootuserApi';
+import { RootState } from 'app/store';
+
 export interface Iuserstate{
   user: {
     token: string
@@ -17,7 +20,7 @@ export interface Iuserstate{
     createIamUser:{
       userName: string,
       passWord: string,
-      permisstion: string
+      permisstion: number
     },
     listUser:user[],
     editIamUser:user,
@@ -25,25 +28,28 @@ export interface Iuserstate{
   }
 }
 interface Iuserlist {
-  fake1:user[]
+  list:user[]
 }
 function UserList(props:Iuserlist): JSX.Element {
   const [loading, setLoading] = useState<boolean>(true)
   const [selectedIamUser, setSelectedIamUser] = useState<React.Key[]>([]);
-
+  const userList = useSelector((state: RootState)=>state.userlistReducer.listUser)
+  console.log(userList)
   useEffect(() => {
-    //Todo: Call api to get bucket list
     setTimeout(() => {
       setLoading(false);
     }, 1000);
+    rootUserApi
+      .getListIamUser()
+      .then(res=>dispatch(getListIamUser(res.user)))
   }, []);
   const dispatch = useDispatch()
-  const {fake1}=props
-  const handleDeleteUser = (id: number): void => {
+  const {list}=props
+  const handleDeleteUser = (id: string): void => {
+    dispatch(deleteUser(id))
     message.info(`Delete user id = ${id}`);
   }
-  const handleSelect = (selectedRowKeys: React.Key[], selectedRows: user[]): void => {
-    console.log('🚀 ~ file: index.tsx ~ line 58 ~ handleChangeSelect ~ selectedRows', selectedRows);
+  const handleSelect = (selectedRowKeys: React.Key[]): void => {
     console.log('🚀 ~ file: index.tsx ~ line 58 ~ handleChangeSelect ~ selectedRowKeys', selectedRowKeys);
     setSelectedIamUser(selectedRowKeys);
   };
@@ -54,30 +60,33 @@ function UserList(props:Iuserlist): JSX.Element {
     console.log('🚀 ~ file: index.tsx ~ line 72 ~ handleChange ~ pagination', pagination);
     console.log('🚀 ~ file: index.tsx ~ line 72 ~ handleChange ~ sorter', sorter);
   };
-  const handleDeleteMulBucket = () => {
+  const handleDeleteMulUser = () => {
     if (!selectedIamUser.length) {
       message.warning('Please select at least one bucket');
       return;
     }
-    console.log('Delete: ');
-    console.log({ selectedIamUser });
-    message.info('Delete multi bucket');
-  };
+    dispatch(deleteMulUser(selectedIamUser))
+    message.info('Delete multi IamUSer');
+  }
   return(
     <div>
       <div>User List Page</div>
-      <div className='user__header'>
-        <Input size="large" placeholder="Search..." 
-          prefix={<SearchOutlined />} className='user__search'
-          onChange={e=>dispatch(searchUser(e.target.value.trim()))}
-        />
-        <div style={{width:'40%'}}/>
-        <Createusermodal />
-        <Button1 type="primary" htmlType="submit" onClick={handleDeleteMulBucket}
-          className="w-100 user__delete__btn" size="large" id='delete__btn' 
-        >
-          Delete
-        </Button1>
+      <div className="bucket-table-container">
+        <div className="d-flex justify-content-between">
+          <div className="bucket-table-container__search">
+            <Input size="large" placeholder="Search..." prefix={<SearchOutlined />} onChange={e=>dispatch(searchUser(e.target.value.trim()))} />
+          </div>
+          <div className="bucket-table-container__actions">
+            <Popconfirm title="Are you sure to delete?" onConfirm={handleDeleteMulUser} okText="Yes" cancelText="No">
+              <Button type="primary" danger>
+                Delete
+              </Button>
+            </Popconfirm>
+            <Createusermodal />
+          </div>
+        </div>
+        <div className="mt-4">
+        </div>
       </div>
       <div style={{ marginTop: '40px' }}>
         <Usertable 
@@ -85,14 +94,14 @@ function UserList(props:Iuserlist): JSX.Element {
           onDelete={handleDeleteUser}
           onChange={handleChange}
           onSelect={handleSelect}
-          data={fake1}
+          data={list}
         />
       </div>
     </div>
   ) 
 }
 const mapStatetoProps= (state: Iuserstate)=>({
-  fake1:state.userlistReducer.listUser,
+  list:state.userlistReducer.listUser,
   searchIamUser: state.userlistReducer.searchIamUser
 })
 export default connect(mapStatetoProps,null)(UserList);
