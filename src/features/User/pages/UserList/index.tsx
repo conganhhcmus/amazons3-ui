@@ -3,13 +3,15 @@ import { SearchOutlined } from '@ant-design/icons';
 import {  Input,TablePaginationConfig,Popconfirm } from 'antd';
 import './userlist.css'
 import { Button,message} from 'antd';
-import { useDispatch,connect } from 'react-redux';
+import { useDispatch,connect, useSelector } from 'react-redux';
 import {searchUser,deleteMulUser,deleteUser,getListIamUser } from 'app/userlist/userliststore'
 import {user} from 'app/userlist/userliststore'
 import Createusermodal from '../Createusermodal/index'
 import Usertable from '../UserTable';
 import { SorterResult } from 'antd/lib/table/interface';
 import rootUserApi from 'api/rootuserApi';
+import { RootState } from 'app/store';
+
 export interface Iuserstate{
   user: {
     token: string
@@ -31,7 +33,8 @@ interface Iuserlist {
 function UserList(props:Iuserlist): JSX.Element {
   const [loading, setLoading] = useState<boolean>(true)
   const [selectedIamUser, setSelectedIamUser] = useState<React.Key[]>([]);
-
+  const userList = useSelector((state: RootState)=>state.userlistReducer.listUser)
+  console.log(userList)
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);

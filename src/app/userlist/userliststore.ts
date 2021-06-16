@@ -15,7 +15,7 @@ const initialState = {
   createIamUser: {
     userName: '',
     passWord: '',
-    permisstion: '',
+    permisstion: 0,
   },
   editIamUser: {
     id: '',

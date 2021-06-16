@@ -5,7 +5,7 @@ import { createIamUser } from 'app/userlist/userliststore'
 import {  Input, Button as Button1} from 'antd';
 import  rootUserApi  from 'api/rootuserApi';
 import { RootState } from 'app/store';
-
+import {getListIamUser } from 'app/userlist/userliststore'
 interface Ioption{
   key: number,
   value: number,
@@ -83,8 +83,8 @@ function Createusermodal(): JSX.Element {
           icon='checkmark'
           onClick={() =>{
             setOpen(false)
-            rootUserApi.createIamUser(user.userName,user.passWord,2)
-              .then(res=>console.log(res))
+            rootUserApi.createIamUser(user.userName,user.passWord,user.permisstion)
+              .then(()=>rootUserApi.getListIamUser().then(data=>dispatch(getListIamUser(data.user))))
           }
    
           }

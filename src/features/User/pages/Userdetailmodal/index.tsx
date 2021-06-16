@@ -133,7 +133,6 @@ function Userdetailmodal(props: userdetail): JSX.Element {
           icon='checkmark'
           onClick={() =>{
             rootUserApi.getListIamUser()
-              .then(res=>console.log('ahuhu',res))
               .then(()=>setOpen(false))
           } 
           }
