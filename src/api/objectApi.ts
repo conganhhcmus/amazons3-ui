@@ -39,6 +39,10 @@ const objectApi = {
     return axiosClient.get(url);
   },
 
+  deleteObject: (objectId: any) => {
+    const url =   `${storage_service_api}/api/v1/objects/${objectId}`;
+    return axiosClient.delete(url);
+  }
 };
 
 export default objectApi;

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import HeaderPage from "../../../../components/HeaderPage";
-import {Button, Row, Col, Typography} from "antd";
+import { Button, Row, Col, Typography, message, Popconfirm } from 'antd';
 import {DownloadOutlined, DeleteOutlined} from "@ant-design/icons";
 import objectApi from '../../../../api/objectApi';
 import { useParams } from 'react-router-dom';
-import { reverse } from 'lodash';
 import moment from 'moment';
+import { useHistory } from 'react-router';
 
 const { Title, Text } = Typography;
 
@@ -33,6 +33,7 @@ const normalizeObjectInfoResponse = (data: any) => {
 };
 
 function ObjectInfo(): JSX.Element {
+  const history = useHistory();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/ban-ts-comment
   // @ts-ignore
   const {id} = useParams();
@@ -40,13 +41,21 @@ function ObjectInfo(): JSX.Element {
 
   useEffect(()=>{
     objectApi.getDetailObject(id).then( (res: any) => {
-      console.log(res.data);
       if (res.data != null){
         const normalizaData = normalizeObjectInfoResponse(res.data);
         setObjectData(normalizaData);
       }
     });
   },[]);
+
+  const deleteObjectHandle = () => {
+    objectApi.deleteObject(id).then((res: any) => {
+      if (res.message == "success"){
+        message.info('Deleted.');
+        history.goBack();
+      }
+    });
+  }
 
   return (
     <>
@@ -65,9 +74,11 @@ function ObjectInfo(): JSX.Element {
             <Button className="ml-2" type="default" icon={<DownloadOutlined />}>
                         Download
             </Button>
-            <Button className="ml-2" type="primary" icon={<DeleteOutlined/>} danger>
-                        Delete
-            </Button>
+            <Popconfirm className="ml-2" title="Are you sure to delete this object?" onConfirm={deleteObjectHandle} okText="Yes" cancelText="No">
+              <Button type="primary" danger>
+                Delete
+              </Button>
+            </Popconfirm>
           </div>
         </div>
         <div className="mt-4">
