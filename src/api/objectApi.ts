@@ -19,11 +19,11 @@ const objectApi = {
   //   return axiosClient.get(url);
   // },
 
-  addFolder: (folderName: string, parentId: string): any => {
-    const url = `${storage_service_api}/api/v1/buckets/${parentId}/addFolder`;
+  addFolder: (folderName: any, bucketId: any, parentId: any): any => {
+    const url = `${storage_service_api}/api/v1/buckets/${bucketId}/addFolder`;
     const body = {
-      folderName,
-      parentId,
+      name : folderName,
+      parent: parentId,
     };
 
     return axiosClient.post(url, body);
