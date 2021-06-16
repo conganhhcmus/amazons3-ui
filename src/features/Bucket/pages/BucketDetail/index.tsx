@@ -3,7 +3,7 @@ import HeaderPage from 'components/HeaderPage';
 import { Button, Input, message, TablePaginationConfig, Dropdown, Menu, Form } from 'antd';
 import { SearchOutlined, DownloadOutlined, UploadOutlined, SettingOutlined } from '@ant-design/icons';
 import ObjectTable, { IObjectRow } from 'features/Object/components/ObjectTable';
-import { range, reverse } from 'lodash';
+import { reverse } from 'lodash';
 import { FilterValue, SorterResult } from 'antd/lib/table/interface';
 import { useHistory } from 'react-router';
 import ModalCreateFolder from 'features/Object/components/ModalCreateFolder';
@@ -11,21 +11,12 @@ import { useParams } from 'react-router-dom';
 import objectApi from '../../../../api/objectApi';
 import moment from 'moment';
 
-// const dummyData = range(0, 30, 1).map((index: number) => ({
-//   id: index,
-//   name: `Object name ${index}`,
-//   folder: `Folder ${index}`,
-//   type: `txt`,
-//   size: `${index} MB`,
-//   dateModified: '30/04/2021',
-// }));
-
 const normalizeObjectResponse = (data: any) => {
   const newData = reverse(
     data.map((item: any) => ({
       id: item?.id?.toString(),
       name: item?.name,
-      folder: item?.region,
+      folder: item?.folder ? item?.folder : 'Root',
       type: item?.type,
       size: item?.size,
       dateModified: item?.last_update ? item?.last_update : moment(Date.now()).format('DD/MM/YYYY'),
@@ -73,7 +64,7 @@ function BucketDetail(): JSX.Element {
         setLoading(false);
       });
     }, 1000);
-  }, []);
+  }, [objectsList]);
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     const {
@@ -123,9 +114,16 @@ function BucketDetail(): JSX.Element {
   };
 
   const handleCreateFolder = (): void => {
-    message.info('Create new folder');
-    toggleModalCreate();
-    createFolderForm.resetFields();
+    const folderName = createFolderForm.getFieldValue('name');
+    objectApi.addFolder(folderName, id, null).then((res: any) => {
+      console.log(res);
+      if (res.data) {
+        toggleModalCreate();
+        message.info('Create new folder');
+        createFolderForm.resetFields();
+        setObjectsList([res.data]);
+      }
+    });
   };
 
   const handleUploadFile = (e: any) => {
