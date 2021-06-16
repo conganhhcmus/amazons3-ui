@@ -1,6 +1,6 @@
 import axiosClient from './axiosClient';
 
-const storage_service_api = 'https://storage-api-app.herokuapp.com';
+const storage_service_api = 'https://storage-service-s3.herokuapp.com';
 
 const objectApi = {
   getObjectsIndex: (bucketId: string): any => {
@@ -26,7 +26,7 @@ const objectApi = {
   addFolder: (folderName: any, bucketId: any, parentId: any): any => {
     const url = `${storage_service_api}/api/v1/buckets/${bucketId}/addFolder`;
     const body = {
-      name : folderName,
+      name: folderName,
       parent: parentId,
     };
 

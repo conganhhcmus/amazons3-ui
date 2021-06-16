@@ -72,7 +72,7 @@ function BucketList(): JSX.Element {
       console.log('🚀 ~ file: index.tsx ~ line 66 ~ bucketApi.createBucket ~ res', res);
       const currentTimestamp = Date.now();
       const newBucket = {
-        id: `${buckets.length}`,
+        id: `${res?.data?.id}`,
         name: bucketName,
         region: region,
         user: `User ${userInfo?.userId}`,
