@@ -1,7 +1,7 @@
 import { IBucket } from './../features/Bucket/pages/BucketList/index';
 import axiosClient from './axiosClient';
 
-const baseUrl = 'https://storage-api-app.herokuapp.com/';
+const baseUrl = 'https://storage-service-s3.herokuapp.com/';
 
 const bucketApi = {
   getBuckets: (): Promise<{ data: IBucket[] }> => {
