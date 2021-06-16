@@ -32,6 +32,17 @@ const objectApi = {
 
     return axiosClient.post(url, body);
   },
+
+  getDetailObject: (objectId: any): any => {
+    const url =   `${storage_service_api}/api/v1/objects/${objectId}`;
+
+    return axiosClient.get(url);
+  },
+
+  deleteObject: (objectId: any) => {
+    const url =   `${storage_service_api}/api/v1/objects/${objectId}`;
+    return axiosClient.delete(url);
+  }
 };
 
 export default objectApi;
