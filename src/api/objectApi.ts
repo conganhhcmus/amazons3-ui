@@ -1,15 +1,14 @@
 import axiosClient from './axiosClient';
-import { IObjectRow } from '../features/Object/components/ObjectTable';
 
 const storage_service_api = 'https://storage-api-app.herokuapp.com';
 
 const objectApi = {
-  getObjectsIndex: (parentId: string): Promise<{ data: IObjectRow[] }> => {
+  getObjectsIndex: (parentId: string): any => {
     const url = `${storage_service_api}/api/v1/buckets/${parentId}/index`;
     return axiosClient.get(url);
   },
 
-  getObjectsInFolder: (parentId: string, folderId: string): Promise<{ data: IObjectRow[] }> => {
+  getObjectsInFolder: (parentId: string, folderId: string): any => {
     const url = `${storage_service_api}/api/v1/buckets/${parentId}/${folderId}`;
     return axiosClient.get(url);
   },
@@ -24,7 +23,7 @@ const objectApi = {
     return axiosClient.post(url, body);
   },
 
-  addFolder: (folderName: string, parentId: string): Promise<{ success: boolean }> => {
+  addFolder: (folderName: string, parentId: string): any => {
     const url = `${storage_service_api}/api/v1/buckets/${parentId}/addFolder`;
     const body = {
       folderName,
