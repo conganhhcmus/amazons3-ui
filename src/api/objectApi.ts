@@ -3,13 +3,13 @@ import axiosClient from './axiosClient';
 const storage_service_api = 'https://storage-api-app.herokuapp.com';
 
 const objectApi = {
-  getObjectsIndex: (parentId: string): any => {
-    const url = `${storage_service_api}/api/v1/buckets/${parentId}/index`;
+  getObjectsIndex: (bucketId: string): any => {
+    const url = `${storage_service_api}/api/v1/buckets/${bucketId}/index`;
     return axiosClient.get(url);
   },
 
-  getObjectsInFolder: (parentId: string, folderId: string): any => {
-    const url = `${storage_service_api}/api/v1/buckets/${parentId}/${folderId}`;
+  getObjectsInFolder: (bucketId: string, folderId: string): any => {
+    const url = `${storage_service_api}/api/v1/buckets/${bucketId}/${folderId}`;
     return axiosClient.get(url);
   },
 
