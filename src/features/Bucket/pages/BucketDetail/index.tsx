@@ -3,19 +3,37 @@ import HeaderPage from "components/HeaderPage";
 import {Button, Input, message, TablePaginationConfig, Dropdown, Menu, Form} from "antd";
 import {SearchOutlined, DownloadOutlined, UploadOutlined, SettingOutlined} from "@ant-design/icons";
 import ObjectTable, {IObjectRow} from "features/Object/components/ObjectTable";
-import {range} from "lodash";
+import { range, reverse } from 'lodash';
 import {FilterValue, SorterResult} from "antd/lib/table/interface";
-import {useHistory} from "react-router";
+import { useHistory } from 'react-router';
 import ModalCreateFolder from "features/Object/components/ModalCreateFolder";
+import { useParams } from 'react-router-dom'
+import objectApi from '../../../../api/objectApi';
+import moment from 'moment';
 
-const dummyData = range(0, 30, 1).map((index: number) => ({
-  id: index,
-  name: `Object name ${index}`,
-  folder: `Folder ${index}`,
-  type: `txt`,
-  size: `${index} MB`,
-  dateModified: '30/04/2021',
-}));
+
+// const dummyData = range(0, 30, 1).map((index: number) => ({
+//   id: index,
+//   name: `Object name ${index}`,
+//   folder: `Folder ${index}`,
+//   type: `txt`,
+//   size: `${index} MB`,
+//   dateModified: '30/04/2021',
+// }));
+
+const normalizeObjectResponse = (data: any) => {
+  const newData = reverse(
+    data.map((item: any) => ({
+      id: item?.id?.toString(),
+      name: item?.name,
+      folder: item?.region,
+      type: item?.type,
+      size: item?.size,
+      dateModified: item?.last_update ? item?.last_update : moment(Date.now()).format('DD/MM/YYYY'),
+    })),
+  );
+  return newData;
+};
 
 const menu = (
   <Menu>
@@ -37,21 +55,34 @@ const menu = (
   </Menu>
 );
 
+
 function BucketDetail(): JSX.Element {
   const history = useHistory();
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedObjectKeys, setSelectedObjectKeys] = useState<React.Key[]>([]);
   const [visibleModalCreate, setVisibleModalCreate] = useState<boolean>(false);
   const [createFolderForm] = Form.useForm();
-
+  const [objectsList, setObjectsList] = useState<IObjectRow[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const {id} = useParams();
   //Search
   let timeout: NodeJS.Timeout;
+
+
   useEffect(() => {
-    //Todo: Call api to get bucket list
     setTimeout(() => {
-      setLoading(false);
+      objectApi.getObjectsIndex(id).then( (res: any) => {
+        if (res.data != null){
+          const normalizeData = normalizeObjectResponse(res);
+          setObjectsList(normalizeData);
+        }
+        setLoading(false);
+      });
     }, 1000);
   }, []);
+
+
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     const {
       target: { value },
@@ -142,7 +173,7 @@ function BucketDetail(): JSX.Element {
         <div className="mt-4">
           <ObjectTable
             loading={loading}
-            data={dummyData}
+            data={objectsList}
             onChange={handleChange}
             onSelect={handleSelect}
             onSearch={handleSearch}
