@@ -39,7 +39,7 @@ const menu = (
   </Menu>
 );
 
-function BucketDetail(): JSX.Element {
+function FolderDetail(): JSX.Element {
   const history = useHistory();
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedObjectKeys, setSelectedObjectKeys] = useState<React.Key[]>([]);
@@ -50,13 +50,13 @@ function BucketDetail(): JSX.Element {
   const [objectsList, setObjectsList] = useState<IObjectRow[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const { id } = useParams();
+  const { id, parent } = useParams();
   //Search
   let timeout: NodeJS.Timeout;
 
   useEffect(() => {
     setTimeout(() => {
-      objectApi.getObjectsIndex(id).then((res: any) => {
+      objectApi.getObjectsInFolder(id, parent).then((res: any) => {
         if (res.data != null) {
           const normalizeData = normalizeObjectResponse(res.data);
           setObjectsList(normalizeData);
@@ -120,7 +120,7 @@ function BucketDetail(): JSX.Element {
 
   const handleCreateFolder = (): void => {
     const folderName = createFolderForm.getFieldValue('name');
-    objectApi.addFolder(folderName, id, null).then((res: any) => {
+    objectApi.addFolder(folderName, id, parent).then((res: any) => {
       console.log(res);
       if (res.data) {
         toggleModalCreate();
@@ -133,7 +133,7 @@ function BucketDetail(): JSX.Element {
 
   const handleUploadFile = (e: any) => {
     const file = e.target.files[0];
-    objectApi.uploadFile(2, file, null).then((res: any) => {
+    objectApi.uploadFile(id, file, parent).then((res: any) => {
       console.log({ res });
       message.success('Successful uploaded file');
     });
@@ -142,7 +142,7 @@ function BucketDetail(): JSX.Element {
   return (
     <>
       <HeaderPage
-        title="Bucket name"
+        title="Folder name"
         breadcrumbs={[
           {
             label: 'Back to buckets list',
@@ -182,7 +182,7 @@ function BucketDetail(): JSX.Element {
             onSelect={handleSelect}
             onSearch={handleSearch}
             onViewDetail={handleViewObject}
-            parentID={null}
+            parentID={parent}
           />
         </div>
         <ModalCreateFolder
@@ -197,4 +197,4 @@ function BucketDetail(): JSX.Element {
   );
 }
 
-export default BucketDetail;
+export default FolderDetail;
