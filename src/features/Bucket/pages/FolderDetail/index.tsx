@@ -135,6 +135,7 @@ function FolderDetail(): JSX.Element {
     const file = e.target.files[0];
     objectApi.uploadFile(id, file, parent).then((res: any) => {
       console.log({ res });
+      setObjectsList([res]);
       message.success('Successful uploaded file');
     });
   };
