@@ -17,17 +17,24 @@ export interface IObjectInfo{
   size: string;
   type: string;
   path: string;
+  bucket_name: string;
+  folder_name: string;
+  user_id: string;
 }
 
 const normalizeObjectInfoResponse = (data: any) => {
+
   const newData = {
     id: data?.id?.toString(),
     bucket_id: data?.bucket_id?.toString(),
     name: data?.name,
     path: data?.path,
-    type: data?.type,
+    type: data?.file_type,
     size: data?.size,
-    lastModified: data?.last_update ? data?.last_update : moment(Date.now()).format('DD/MM/YYYY'),
+    lastModified: data?.last_update ? moment(Date.parse(data?.last_update)).format('DD/MM/YYYY HH:mm:ss') : moment(Date.now()).format('DD/MM/YYYY HH:mm:ss'),
+    bucket_name: data?.bucket?.name,
+    folder_name: data?.parent?.name,
+    user_id: data?.user_id,
   }
   return newData;
 };
@@ -41,8 +48,13 @@ function ObjectInfo(): JSX.Element {
 
   useEffect(()=>{
     objectApi.getDetailObject(id).then( (res: any) => {
+      console.log(res);
       if (res.data != null){
         const normalizaData = normalizeObjectInfoResponse(res.data);
+
+        // const owner_id = normalizaData.user_id;
+
+
         setObjectData(normalizaData);
       }
     });
@@ -100,7 +112,7 @@ function ObjectInfo(): JSX.Element {
           </Row>
           <Row>
             <Col span={18} push={6}>
-              <Text>{objectData?.size} KB</Text>
+              <Text>{objectData?.size} bytes</Text>
             </Col>
             <Col span={6} pull={18}>
               <Title level={5}>Size</Title>
@@ -125,7 +137,7 @@ function ObjectInfo(): JSX.Element {
           <Row>
             <Col span={18} push={6}>
               {/* eslint-disable-next-line react/no-unescaped-entities */}
-              <Text>User's Bucket</Text>
+              <Text>{objectData?.bucket_name}</Text>
             </Col>
             <Col span={6} pull={18}>
               <Title level={5}>Bucket</Title>
@@ -134,7 +146,7 @@ function ObjectInfo(): JSX.Element {
           <Row>
             <Col span={18} push={6}>
               {/* eslint-disable-next-line react/no-unescaped-entities */}
-              <Text>User's Folder</Text>
+              <Text>{objectData?.folder_name ? objectData?.folder_name : objectData?.bucket_name}</Text>
             </Col>
             <Col span={6} pull={18}>
               <Title level={5}>Folder</Title>
