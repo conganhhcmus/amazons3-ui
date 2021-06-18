@@ -25,11 +25,12 @@ const objectApi = {
     return axiosClient.post(url, body);
   },
 
-  addFolder: (folderName: any, bucketId: any, parentId: any): any => {
+  addFolder: (folderName: any, bucketId: any, parentId: any, userId: any): any => {
     const url = `${storage_service_api}/api/v1/buckets/${bucketId}/addFolder`;
     const body = {
       name: folderName,
       parent: parentId,
+      user_id: userId,
     };
 
     return axiosClient.post(url, body);

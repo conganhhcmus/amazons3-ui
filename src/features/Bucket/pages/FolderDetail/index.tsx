@@ -124,7 +124,7 @@ function FolderDetail(): JSX.Element {
 
   const handleCreateFolder = (): void => {
     const folderName = createFolderForm.getFieldValue('name');
-    objectApi.addFolder(folderName, id, parent).then((res: any) => {
+    objectApi.addFolder(folderName, id, parent, userInfo).then((res: any) => {
       console.log(res);
       if (res.data) {
         toggleModalCreate();
@@ -168,7 +168,7 @@ function FolderDetail(): JSX.Element {
             <Button className="ml-2" type="default" icon={<DownloadOutlined />}>
               Download
             </Button>
-            <Button className="ml-2" type="default" onClick={toggleModalCreate}>
+            <Button className="ml-2" type="default" hidden={true} onClick={toggleModalCreate}>
               Create folder
             </Button>
             <Button className="ml-2" type="primary" danger onClick={handleDeleteMulObjects}>
