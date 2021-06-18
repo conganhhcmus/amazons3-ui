@@ -10,6 +10,8 @@ import ModalCreateFolder from 'features/Object/components/ModalCreateFolder';
 import { useParams } from 'react-router-dom';
 import objectApi from '../../../../api/objectApi';
 import moment from 'moment';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../app/store';
 
 const normalizeObjectResponse = (data: any) => {
   const newData = reverse(
@@ -46,6 +48,8 @@ function FolderDetail(): JSX.Element {
   const [visibleModalCreate, setVisibleModalCreate] = useState<boolean>(false);
   const [createFolderForm] = Form.useForm();
   const inputFileRef: any = useRef(null);
+  const { userInfo } = useSelector((state: RootState) => state.user);
+
 
   const [objectsList, setObjectsList] = useState<IObjectRow[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/ban-ts-comment
@@ -133,7 +137,7 @@ function FolderDetail(): JSX.Element {
 
   const handleUploadFile = (e: any) => {
     const file = e.target.files[0];
-    objectApi.uploadFile(id, file, parent).then((res: any) => {
+    objectApi.uploadFile(id, file, parent, userInfo.userId).then((res: any) => {
       console.log({ res });
       setObjectsList([res]);
       message.success('Successful uploaded file');

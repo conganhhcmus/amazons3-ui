@@ -13,10 +13,12 @@ const objectApi = {
     return axiosClient.get(url);
   },
 
-  uploadFile: (bucketId: any, file: any, parentId: any): any => {
+  uploadFile: (bucketId: any, file: any, parentId: any, userId: any): any => {
     const url = `${storage_service_api}/api/v1/buckets/${bucketId}/upload`;
     const body: any = new FormData();
     body.append('file', file);
+    body.append('file_type', file.type);
+    body.append('user_id', userId);
     if (parentId) {
       body.append('parent', parentId);
     }
