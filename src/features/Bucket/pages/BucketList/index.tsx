@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import 'features/Bucket/pages/BucketList/styles.scss';
 import HeaderPage from 'components/HeaderPage';
 import BucketTable from 'features/Bucket/components/BucketTable';
-import { Button, Form, Input, message, Popconfirm, TablePaginationConfig } from 'antd';
+import { Button, Form, Input, message, Popconfirm, TablePaginationConfig, Popover } from 'antd';
 import { FilterValue, SorterResult } from 'antd/lib/table/interface';
 import { SearchOutlined } from '@ant-design/icons';
 import ModalCreateBucket from 'features/Bucket/components/ModalCreateBucket';
@@ -12,6 +12,8 @@ import bucketApi from 'api/bucketApi';
 import { reverse } from 'lodash';
 import { useSelector } from 'react-redux';
 import { RootState } from 'app/store';
+import { StopOutlined } from '@ant-design/icons';
+import { EPermission } from 'constants/enum';
 
 export interface IBucket {
   id: string;
@@ -49,13 +51,16 @@ function BucketList(): JSX.Element {
 
   useEffect(() => {
     //Todo: Call api to get bucket list
-    bucketApi.getBuckets().then((res: { data: IBucket[] }) => {
-      const { data } = res;
-      const newData = normalizeBucketResponse(data);
-      setBuckets(newData);
+    if (userInfo?.permission === EPermission.NO_ACCESS) {
       setLoadingTable(false);
-    });
-    setLoadingTable(true);
+    } else {
+      bucketApi.getBuckets().then((res: { data: IBucket[] }) => {
+        const { data } = res;
+        const newData = normalizeBucketResponse(data);
+        setBuckets(newData);
+        setLoadingTable(false);
+      });
+    }
   }, []);
 
   //Create bucket
@@ -165,17 +170,45 @@ function BucketList(): JSX.Element {
             <Input size="large" placeholder="Search..." prefix={<SearchOutlined />} onChange={handleSearch} />
           </div>
           <div className="bucket-table-container__actions">
-            <Popconfirm title="Are you sure to delete?" onConfirm={handleDeleteMulBucket} okText="Yes" cancelText="No">
-              <Button type="primary" danger>
-                Delete
+            {userInfo?.permission === EPermission.WRITE_ONLY || userInfo?.permission === EPermission.FULL_ACCESS ? (
+              <Popconfirm
+                title="Are you sure to delete?"
+                onConfirm={handleDeleteMulBucket}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button type="primary" danger>
+                  Delete
+                </Button>
+              </Popconfirm>
+            ) : (
+              <Popover content="Can't delete">
+                <Button className="ml-2" type="primary" disabled>
+                  Delete
+                </Button>
+              </Popover>
+            )}
+
+            {userInfo?.permission === EPermission.WRITE_ONLY || userInfo?.permission === EPermission.FULL_ACCESS ? (
+              <Button className="ml-2" type="primary" onClick={toggleModalCreate}>
+                Create
               </Button>
-            </Popconfirm>
-            <Button className="ml-2" type="primary" onClick={toggleModalCreate}>
-              Create
-            </Button>
+            ) : (
+              <Popover content="Can't create">
+                <Button className="ml-2" type="primary" disabled>
+                  Create
+                </Button>
+              </Popover>
+            )}
           </div>
         </div>
-        <div className="mt-4">
+        <div className="mt-4" style={{ position: 'relative' }}>
+          {userInfo?.permission === EPermission.NO_ACCESS && (
+            <div className="bucket-table">
+              <StopOutlined style={{ fontSize: 25 }} />
+              <div className="mt-2">Can&apos;t access</div>
+            </div>
+          )}
           <BucketTable
             loading={loadingTable}
             data={buckets}

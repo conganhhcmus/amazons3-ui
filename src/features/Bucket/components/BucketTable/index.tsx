@@ -68,9 +68,9 @@ function BucketTable(props: IBucketTable): JSX.Element {
       // eslint-disable-next-line react/display-name
       render: (record: IBucket) => (
         <div className="d-flex justify-content-around align-items-center">
-          <div className="cursor-pointer" onClick={() => onViewDetail(record?.id)}>
+          {/* <div className="cursor-pointer" onClick={() => onViewDetail(record?.id)}>
             <IconView />
-          </div>
+          </div> */}
           <Popconfirm
             title="Are you sure to delete?"
             onConfirm={() => onDelete(record?.id)}
