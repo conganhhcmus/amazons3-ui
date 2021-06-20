@@ -65,6 +65,8 @@
   width: 50%;
   text-align: center;
   height: 100%;
+  color: white;
+  padding: 3px;
 }
 .readonly {
   background-color: #00c2ff;
@@ -72,6 +74,8 @@
   width: 50%;
   text-align: center;
   height: 100%;
+  color: white;
+  padding: 3px;
 }
 .writeonly {
   background-color: #fee074;
@@ -79,6 +83,8 @@
   width: 50%;
   text-align: center;
   height: 100%;
+  color: white;
+  padding: 3px;
 }
 .noaccess {
   background-color: #fd7d7d;
@@ -86,6 +92,8 @@
   width: 50%;
   text-align: center;
   height: 100%;
+  color: white;
+  padding: 3px;
 }
 .user__pagination {
   display: flex;
