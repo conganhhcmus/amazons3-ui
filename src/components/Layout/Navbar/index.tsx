@@ -1,11 +1,12 @@
 import { MenuFoldOutlined, MenuUnfoldOutlined, SearchOutlined } from '@ant-design/icons';
-import React from 'react';
+import React, { useState } from 'react';
 import 'components/Layout/Navbar/styles.scss';
 import AvatarCustom from 'components/AvatarCustom';
 import { Dropdown, Input, Menu } from 'antd';
 import IconArrowDown from 'assets/icon/IconArrowDown';
 import { useSelector } from 'react-redux';
 import { RootState } from 'app/store';
+import ModalProfile from '../ModalProfile';
 
 interface INavbar {
   collapsed: boolean;
@@ -16,9 +17,13 @@ interface INavbar {
 function Navbar(props: INavbar): JSX.Element {
   const { collapsed, toggle, onLogout } = props;
   const { userInfo } = useSelector((state: RootState) => state.user);
+  const [visibleProfile, setVisibleProfile] = useState<boolean>(false);
+
+  const toggleVisibleProfile = () => setVisibleProfile(!visibleProfile);
 
   const menu = (
     <Menu>
+      <Menu.Item onClick={toggleVisibleProfile}>Profile</Menu.Item>
       <Menu.Item onClick={onLogout}>Logout</Menu.Item>
     </Menu>
   );
@@ -41,6 +46,7 @@ function Navbar(props: INavbar): JSX.Element {
           <IconArrowDown />
         </div>
       </Dropdown>
+      <ModalProfile open={visibleProfile} toggle={toggleVisibleProfile} user={userInfo} />
     </div>
   );
 }

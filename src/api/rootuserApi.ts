@@ -46,6 +46,10 @@ const rootUserApi = {
     const url = `${baseUrl}api/v1/users/root-users/child/${id}`;
     return axiosClient.delete(url);
   },
+  getUserById: (id: string): any => {
+    const url = `${baseUrl}api/v1/users/${id}`;
+    return axiosClient.get(url);
+  },
 };
 
 export default rootUserApi;
