@@ -50,7 +50,7 @@ function MainLayout({ children }: { children: React.ReactNode }): JSX.Element {
   return (
     <Layout>
       <Sider className="sider-sidebar" theme="light" trigger={null} collapsible collapsed={collapsedSidebar}>
-        <Sidebar selectedKey={selectedKey} onSelectKey={handleSelectKey} />
+        <Sidebar selectedKey={selectedKey} onSelectKey={handleSelectKey} collapsed={collapsedSidebar} />
       </Sider>
       <Layout>
         <Header className="site-layout-header" style={{ padding: 0 }}>

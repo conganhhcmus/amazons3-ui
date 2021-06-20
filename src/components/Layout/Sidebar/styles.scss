@@ -1,7 +1,12 @@
 .logo {
-  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin: 16px;
+  padding: 10px;
   background: #fee074;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .sidebar-menu {
