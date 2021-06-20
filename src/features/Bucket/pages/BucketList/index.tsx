@@ -7,32 +7,32 @@ import { FilterValue, SorterResult } from 'antd/lib/table/interface';
 import { SearchOutlined } from '@ant-design/icons';
 import ModalCreateBucket from 'features/Bucket/components/ModalCreateBucket';
 import { useHistory } from 'react-router';
-import moment from 'moment';
 import bucketApi from 'api/bucketApi';
 import { reverse } from 'lodash';
 import { useSelector } from 'react-redux';
 import { RootState } from 'app/store';
 import { StopOutlined } from '@ant-design/icons';
 import { EPermission } from 'constants/enum';
+import rootUserApi from 'api/rootuserApi';
 
 export interface IBucket {
   id: string;
   name: string;
   region: string;
   user: string;
-  createDate: string;
-  lastActivity: string;
+  createDate: number;
+  lastActivity: number;
 }
 
-const normalizeBucketResponse = (data: any) => {
+const normalizeBucketResponse = (buckets: any) => {
   const newData = reverse(
-    data.map((item: any) => ({
-      id: item?.id?.toString(),
-      name: item?.name,
-      region: item?.region,
-      user: `User ${item?.user_id}`,
-      createDate: moment(Date.now()).format('DD/MM/YYYY'),
-      lastActivity: item?.last_update ? item?.last_update : moment(Date.now()).format('DD/MM/YYYY'),
+    buckets?.map((bucket: any) => ({
+      id: bucket?.id?.toString(),
+      name: bucket?.name,
+      region: bucket?.region,
+      user: bucket?.username,
+      createDate: bucket?.last_update,
+      lastActivity: bucket?.last_update,
     })),
   );
   return newData;
@@ -45,23 +45,71 @@ function BucketList(): JSX.Element {
   const [visibleModalCreate, setVisibleModalCreate] = useState<boolean>(false);
   const [buckets, setBuckets] = useState<IBucket[]>([]);
   const { userInfo } = useSelector((state: RootState) => state.user);
+  const [numberOfLoadBucket, setNumberOfLoadBucket] = useState<number>(0);
 
   const [createBucketForm] = Form.useForm();
   const history = useHistory();
+
+  const checkExistUsernameInBuckets = (data: any) => {
+    let isExist = true;
+    data?.map((bucket: any) => {
+      if (!bucket?.username) {
+        isExist = false;
+      }
+    });
+    return isExist;
+  };
+
+  const getBucketsFromApi = (userId: string) =>
+    new Promise((resolve) => {
+      bucketApi.getBuckets(userId).then((res: { data: any }) => {
+        const { data } = res;
+        if (!data) {
+          resolve({ data });
+        } else {
+          for (let i = 0; i < data.length; i++) {
+            const item = data[i];
+            rootUserApi.getUserById(item?.user_id).then((res: any) => {
+              data[i].username = res?.user?.username;
+              if (checkExistUsernameInBuckets(data)) {
+                resolve({ data });
+              }
+            });
+          }
+        }
+      });
+    });
 
   useEffect(() => {
     //Todo: Call api to get bucket list
     if (userInfo?.permission === EPermission.NO_ACCESS) {
       setLoadingTable(false);
     } else {
-      bucketApi.getBuckets().then((res: { data: IBucket[] }) => {
-        const { data } = res;
+      getBucketsFromApi(userInfo.userId).then((res: any) => {
+        let { data } = res;
+        if (!data) data = [];
         const newData = normalizeBucketResponse(data);
-        setBuckets(newData);
-        setLoadingTable(false);
+        setBuckets((prevBuckets) => [...prevBuckets, ...newData]);
+        setNumberOfLoadBucket((prevNumber) => prevNumber + 1);
+      });
+      userInfo?.iamUsers?.map((iamUserId: any) => {
+        getBucketsFromApi(iamUserId).then((res: any) => {
+          let { data } = res;
+          if (!data) data = [];
+          const newData = normalizeBucketResponse(data);
+          setBuckets((prevBuckets) => [...prevBuckets, ...newData]);
+          setNumberOfLoadBucket((prevNumber) => prevNumber + 1);
+        });
       });
     }
   }, []);
+
+  useEffect(() => {
+    const number = userInfo?.iamUsers?.length || 0 + 1;
+    if (numberOfLoadBucket === number) {
+      setLoadingTable(false);
+    }
+  }, [numberOfLoadBucket]);
 
   //Create bucket
   const toggleModalCreate = () => {
@@ -74,15 +122,14 @@ function BucketList(): JSX.Element {
     const region = createBucketForm.getFieldValue('region');
 
     bucketApi.createBucket(bucketName, region, userInfo?.userId).then((res: any) => {
-      console.log('🚀 ~ file: index.tsx ~ line 66 ~ bucketApi.createBucket ~ res', res);
       const currentTimestamp = Date.now();
       const newBucket = {
         id: `${res?.data?.id}`,
         name: bucketName,
         region: region,
-        user: `User ${userInfo?.userId}`,
-        createDate: moment(currentTimestamp).format('DD/MM/YYYY'),
-        lastActivity: moment(currentTimestamp).format('DD/MM/YYYY'),
+        user: userInfo?.username,
+        createDate: currentTimestamp,
+        lastActivity: currentTimestamp,
       };
       setBuckets([newBucket, ...buckets]);
       message.info('Successful created');
@@ -108,6 +155,9 @@ function BucketList(): JSX.Element {
       return isOk;
     });
     setBuckets(newBuckets);
+    selectedBucketKeys?.map((key: React.Key) => {
+      bucketApi.deleteBucket(key?.toString());
+    });
     message.info('Successful deleted');
   };
 
