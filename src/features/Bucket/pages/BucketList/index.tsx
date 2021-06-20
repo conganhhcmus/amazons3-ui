@@ -2,25 +2,16 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import 'features/Bucket/pages/BucketList/styles.scss';
 import HeaderPage from 'components/HeaderPage';
 import BucketTable from 'features/Bucket/components/BucketTable';
-import { range, reverse } from 'lodash';
 import { Button, Form, Input, message, Popconfirm, TablePaginationConfig } from 'antd';
 import { FilterValue, SorterResult } from 'antd/lib/table/interface';
 import { SearchOutlined } from '@ant-design/icons';
 import ModalCreateBucket from 'features/Bucket/components/ModalCreateBucket';
 import { useHistory } from 'react-router';
 import moment from 'moment';
-// import bucketApi from 'api/bucketApi';
-
-const dummyData = reverse(
-  range(0, 30, 1).map((index: number) => ({
-    id: `${index}`,
-    name: `Bucket name ${index}`,
-    region: `Region ${index}`,
-    user: `User ${index}`,
-    createDate: '01/01/2021',
-    lastActivity: '01/01/2021',
-  })),
-);
+import bucketApi from 'api/bucketApi';
+import { reverse } from 'lodash';
+import { useSelector } from 'react-redux';
+import { RootState } from 'app/store';
 
 export interface IBucket {
   id: string;
@@ -31,27 +22,40 @@ export interface IBucket {
   lastActivity: string;
 }
 
+const normalizeBucketResponse = (data: any) => {
+  const newData = reverse(
+    data.map((item: any) => ({
+      id: item?.id?.toString(),
+      name: item?.name,
+      region: item?.region,
+      user: `User ${item?.user_id}`,
+      createDate: moment(Date.now()).format('DD/MM/YYYY'),
+      lastActivity: item?.last_update ? item?.last_update : moment(Date.now()).format('DD/MM/YYYY'),
+    })),
+  );
+  return newData;
+};
+
 function BucketList(): JSX.Element {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loadingTable, setLoadingTable] = useState<boolean>(true);
+  const [loadingCreateModal, setLoadingCreateModal] = useState<boolean>(false);
   const [selectedBucketKeys, setSelectedBucketKeys] = useState<React.Key[]>([]);
   const [visibleModalCreate, setVisibleModalCreate] = useState<boolean>(false);
   const [buckets, setBuckets] = useState<IBucket[]>([]);
+  const { userInfo } = useSelector((state: RootState) => state.user);
 
   const [createBucketForm] = Form.useForm();
   const history = useHistory();
 
   useEffect(() => {
     //Todo: Call api to get bucket list
-    // bucketApi.getBuckets().then((res: { data: IBucket[] }) => {
-    //   const { data } = res;
-    //   setBuckets(data);
-    //   setLoading(false);
-    // });
-    setLoading(true);
-    setTimeout(() => {
-      setBuckets(dummyData);
-      setLoading(false);
-    }, 1000);
+    bucketApi.getBuckets().then((res: { data: IBucket[] }) => {
+      const { data } = res;
+      const newData = normalizeBucketResponse(data);
+      setBuckets(newData);
+      setLoadingTable(false);
+    });
+    setLoadingTable(true);
   }, []);
 
   //Create bucket
@@ -60,21 +64,27 @@ function BucketList(): JSX.Element {
   };
 
   const handleCreateBucket = (): void => {
+    setLoadingCreateModal(true);
     const bucketName = createBucketForm.getFieldValue('bucketName');
     const region = createBucketForm.getFieldValue('region');
-    const currentTimestamp = Date.now();
-    const newBucket = {
-      id: `${buckets.length}`,
-      name: bucketName,
-      region: region,
-      user: `User ${buckets.length}`,
-      createDate: moment(currentTimestamp).format('DD/MM/YYYY'),
-      lastActivity: moment(currentTimestamp).format('DD/MM/YYYY'),
-    };
-    setBuckets([newBucket, ...buckets]);
-    message.info('Successful created');
-    toggleModalCreate();
-    createBucketForm.resetFields();
+
+    bucketApi.createBucket(bucketName, region, userInfo?.userId).then((res: any) => {
+      console.log('🚀 ~ file: index.tsx ~ line 66 ~ bucketApi.createBucket ~ res', res);
+      const currentTimestamp = Date.now();
+      const newBucket = {
+        id: `${res?.data?.id}`,
+        name: bucketName,
+        region: region,
+        user: `User ${userInfo?.userId}`,
+        createDate: moment(currentTimestamp).format('DD/MM/YYYY'),
+        lastActivity: moment(currentTimestamp).format('DD/MM/YYYY'),
+      };
+      setBuckets([newBucket, ...buckets]);
+      message.info('Successful created');
+      toggleModalCreate();
+      createBucketForm.resetFields();
+      setLoadingCreateModal(false);
+    });
   };
 
   //Delete bucket
@@ -134,6 +144,8 @@ function BucketList(): JSX.Element {
     message.info(`Successful deleted`);
     const newBuckets = buckets.filter((bucket: IBucket) => bucket?.id !== id);
     setBuckets(newBuckets);
+
+    bucketApi.deleteBucket(id);
   };
 
   return (
@@ -165,7 +177,7 @@ function BucketList(): JSX.Element {
         </div>
         <div className="mt-4">
           <BucketTable
-            loading={loading}
+            loading={loadingTable}
             data={buckets}
             onChange={handleChange}
             onSelect={handleSelect}
@@ -178,7 +190,7 @@ function BucketList(): JSX.Element {
           visible={visibleModalCreate}
           onCancel={toggleModalCreate}
           onOk={handleCreateBucket}
-          loading={loading}
+          loading={loadingCreateModal}
           form={createBucketForm}
         />
       </div>

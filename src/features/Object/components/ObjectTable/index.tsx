@@ -14,7 +14,7 @@ export interface IObjectRow {
 interface IObjectTable {
   loading: boolean;
   data: IObjectRow[];
-  parentID: number;
+  parentID: any;
   onSearch: (e: ChangeEvent<HTMLInputElement>) => void;
   onChange: (
     pagination: TablePaginationConfig,
@@ -36,7 +36,7 @@ function ObjectTable(props: IObjectTable): JSX.Element {
       sorter: true,
       sortDirection: ['descend', 'ascend'],
       // eslint-disable-next-line react/display-name
-      render: (text: string, record: IObjectRow) => <a onClick={() => onViewDetail(parentID, record?.id,)} >{text}</a>,
+      render: (text: string, record: IObjectRow) => <a onClick={() => onViewDetail(parentID, record?.id)} >{text}</a>,
     },
     {
       title: 'Folder',

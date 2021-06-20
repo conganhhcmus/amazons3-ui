@@ -1,16 +1,66 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import HeaderPage from "../../../../components/HeaderPage";
-import {Button, Row, Col, Typography} from "antd";
+import { Button, Row, Col, Typography, message, Popconfirm } from 'antd';
 import {DownloadOutlined, DeleteOutlined} from "@ant-design/icons";
+import objectApi from '../../../../api/objectApi';
+import { useParams } from 'react-router-dom';
+import moment from 'moment';
+import { useHistory } from 'react-router';
 
 const { Title, Text } = Typography;
 
+export interface IObjectInfo{
+  id: string;
+  bucket_id: string;
+  name: string;
+  lastModified: string;
+  size: string;
+  type: string;
+  path: string;
+}
+
+const normalizeObjectInfoResponse = (data: any) => {
+  const newData = {
+    id: data?.id?.toString(),
+    bucket_id: data?.bucket_id?.toString(),
+    name: data?.name,
+    path: data?.path,
+    type: data?.type,
+    size: data?.size,
+    lastModified: data?.last_update ? data?.last_update : moment(Date.now()).format('DD/MM/YYYY'),
+  }
+  return newData;
+};
+
 function ObjectInfo(): JSX.Element {
+  const history = useHistory();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const {id} = useParams();
+  const [objectData, setObjectData] = useState<IObjectInfo>();
+
+  useEffect(()=>{
+    objectApi.getDetailObject(id).then( (res: any) => {
+      if (res.data != null){
+        const normalizaData = normalizeObjectInfoResponse(res.data);
+        setObjectData(normalizaData);
+      }
+    });
+  },[]);
+
+  const deleteObjectHandle = () => {
+    objectApi.deleteObject(id).then((res: any) => {
+      if (res.message == "success"){
+        message.info('Deleted.');
+        history.goBack();
+      }
+    });
+  }
 
   return (
     <>
       <HeaderPage
-        title="Object name"
+        title={objectData?.name ? objectData.name : "Object"}
         breadcrumbs={[
           {
             label: 'Back to buckets list',
@@ -24,15 +74,17 @@ function ObjectInfo(): JSX.Element {
             <Button className="ml-2" type="default" icon={<DownloadOutlined />}>
                         Download
             </Button>
-            <Button className="ml-2" type="primary" icon={<DeleteOutlined/>} danger>
-                        Delete
-            </Button>
+            <Popconfirm className="ml-2" title="Are you sure to delete this object?" onConfirm={deleteObjectHandle} okText="Yes" cancelText="No">
+              <Button type="primary" danger>
+                Delete
+              </Button>
+            </Popconfirm>
           </div>
         </div>
         <div className="mt-4">
           <Row>
             <Col span={18} push={6}>
-              <Text>Khanh Hong</Text>
+              <Text>User</Text>
             </Col>
             <Col span={6} pull={18}>
               <Title level={5}>Owner</Title>
@@ -40,7 +92,7 @@ function ObjectInfo(): JSX.Element {
           </Row>
           <Row>
             <Col span={18} push={6}>
-              <Text>01/05/2021 10:28</Text>
+              <Text>{objectData?.lastModified}</Text>
             </Col>
             <Col span={6} pull={18}>
               <Title level={5}>Last modified</Title>
@@ -48,7 +100,7 @@ function ObjectInfo(): JSX.Element {
           </Row>
           <Row>
             <Col span={18} push={6}>
-              <Text>10MB</Text>
+              <Text>{objectData?.size} KB</Text>
             </Col>
             <Col span={6} pull={18}>
               <Title level={5}>Size</Title>
@@ -56,7 +108,7 @@ function ObjectInfo(): JSX.Element {
           </Row>
           <Row>
             <Col span={18} push={6}>
-              <Text>PNG</Text>
+              <Text>{objectData?.type}</Text>
             </Col>
             <Col span={6} pull={18}>
               <Title level={5}>Type</Title>
@@ -64,7 +116,7 @@ function ObjectInfo(): JSX.Element {
           </Row>
           <Row>
             <Col span={18} push={6}>
-              <Text>https://url</Text>
+              <Text>{objectData?.path}</Text>
             </Col>
             <Col span={6} pull={18}>
               <Title level={5}>URL</Title>
@@ -73,7 +125,7 @@ function ObjectInfo(): JSX.Element {
           <Row>
             <Col span={18} push={6}>
               {/* eslint-disable-next-line react/no-unescaped-entities */}
-              <Text>Khanh Hong's Bucket</Text>
+              <Text>User's Bucket</Text>
             </Col>
             <Col span={6} pull={18}>
               <Title level={5}>Bucket</Title>
@@ -82,7 +134,7 @@ function ObjectInfo(): JSX.Element {
           <Row>
             <Col span={18} push={6}>
               {/* eslint-disable-next-line react/no-unescaped-entities */}
-              <Text>Khanh Hong's Folder</Text>
+              <Text>User's Folder</Text>
             </Col>
             <Col span={6} pull={18}>
               <Title level={5}>Folder</Title>
