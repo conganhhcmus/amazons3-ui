@@ -1,10 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { random, range } from 'lodash';
 export interface user {
-  iamTokens: {
-    publicToken:string,
-    privateToken:string
-  },
+  publicToken:string,
+  privateToken:string
   permission: number,
   _id:string,
   username:string,
@@ -15,17 +12,39 @@ const initialState = {
   createIamUser: {
     userName: '',
     passWord: '',
-    permisstion: 0,
+    permission: -1,
   },
   editIamUser: {
-    id: '',
-    userName: '',
-    permisstion: 0,
-    accessKeyAge: '',
-    passwordAge: '',
-    lastActivity: ''
+    publicToken:'',
+    privateToken:'string',
+    permission: -1,
+    _id:'',
+    username:'',
+    password:'',
+    owner:''
   },
-  listUser: '',
+  listUser: [
+    {
+      publicToken:'',
+      privateToken:'',
+      permission: null,
+      _id:'',
+      username:'',
+      password:'',
+      owner:''
+    }
+  ],
+  temp:[
+    {
+      publicToken:'',
+      privateToken:'',
+      permission: null,
+      _id:'',
+      username:'',
+      password:'',
+      owner:''
+    }
+  ],
 }
 
 const userListSlice = createSlice({
@@ -49,20 +68,24 @@ const userListSlice = createSlice({
     },
     searchUser: (state, {payload}) => {
       if(payload.trim().length==0){
-        state.listUser= initialState.listUser
+        state.listUser= state.temp
       }
       else{
-        console.log('search')
-        // state.listUser=state.listUser.filter(data=>data.userName.includes(payload))
+        state.temp=state.listUser
+        state.listUser=state.listUser.filter(data=>data.username.includes(payload))
       }
     },
     deleteMulUser: (state, { payload }) => {
-      // for (let i = 0; i < payload.length; i++) {
-      //   state.listUser = state.listUser.filter(data => data.id !== payload[i])
-      // }
+      for (let i = 0; i < payload.length; i++) {
+        state.listUser = state.listUser.filter(data => {
+          if(data._id)
+            data._id !== payload[i]
+          return data
+        })
+      }
     },
     deleteUser: (state, { payload }) => {
-      // state.listUser = state.listUser.filter(data => data.id !== payload)
+      state.listUser = state.listUser.filter(data => data._id !== payload)
     },
     getListIamUser:(state,{payload})=>{
       state.listUser=payload
