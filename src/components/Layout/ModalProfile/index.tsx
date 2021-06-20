@@ -53,7 +53,7 @@ function ModalProfile(props: IProps): JSX.Element {
               <span className="modal__span">*</span>Username:
             </div>
             <div>
-              <Input fluid placeholder="Username" value={user.username} disabled />
+              <Input fluid placeholder="Username" value={user?.username} disabled />
             </div>
             <br></br>
             <div>
@@ -67,16 +67,16 @@ function ModalProfile(props: IProps): JSX.Element {
               <span className="modal__span">*</span>Permission:
             </div>
             <div>
-              <Dropdown placeholder={permiss(user.permission)} fluid selection options={Options} />
+              <Dropdown placeholder={permiss(user?.permission)} fluid selection options={Options} />
             </div>
             <div style={{ paddingTop: '10px' }}>
               <div>
                 <div>Public Token:</div>
-                <Input disabled defaultValue={user.publicToken} />
+                <Input disabled defaultValue={user?.publicToken} />
                 <Button
                   positive
                   onClick={() => {
-                    navigator.clipboard.writeText(user.publicToken);
+                    navigator.clipboard.writeText(user?.publicToken);
                   }}
                 >
                   Copy
@@ -84,11 +84,11 @@ function ModalProfile(props: IProps): JSX.Element {
               </div>
               <div>
                 <div>Private Token:</div>
-                <Input disabled defaultValue={user.privateToken} />
+                <Input disabled defaultValue={user?.privateToken} />
                 <Button
                   positive
                   onClick={() => {
-                    navigator.clipboard.writeText(user.privateToken);
+                    navigator.clipboard.writeText(user?.privateToken);
                   }}
                 >
                   Copy
