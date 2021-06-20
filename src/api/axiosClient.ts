@@ -9,12 +9,13 @@ const axiosClient = axios.create({
   headers: {
     'content-type': 'application/json',
   },
+  
   paramsSerializer: (params: Record<string, unknown>) => queryString.stringify(params),
 });
 
 axiosClient.interceptors.request.use(async (config: AxiosRequestConfig) => {
   const token = cookies.get('token');
-  if (token) config.headers.Authorization = `${token}`;
+  if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 

@@ -1,8 +1,10 @@
 import { Menu } from 'antd';
+import { RootState } from 'app/store';
 import IconBucket from 'assets/icon/IconBucket';
 import IconUsers from 'assets/icon/IconUsers';
 import 'components/Layout/Sidebar/styles.scss';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 
 interface ISidebar {
@@ -13,7 +15,7 @@ interface ISidebar {
 function Sidebar(props: ISidebar): JSX.Element {
   const { selectedKey, onSelectKey } = props;
   const history = useHistory();
-
+  const isRoot = useSelector((state: RootState) => (state.user.userInfo)?(state.user.userInfo.userName):null)
   return (
     <>
       <div className="logo" />
@@ -35,7 +37,7 @@ function Sidebar(props: ISidebar): JSX.Element {
         >
           Bucket
         </Menu.Item>
-        <Menu.Item
+        {isRoot&&<Menu.Item
           key="2"
           icon={
             <span>
@@ -45,7 +47,7 @@ function Sidebar(props: ISidebar): JSX.Element {
           onClick={() => history.push('/users')}
         >
           User
-        </Menu.Item>
+        </Menu.Item>}
       </Menu>
     </>
   );

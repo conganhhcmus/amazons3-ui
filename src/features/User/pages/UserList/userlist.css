@@ -62,30 +62,38 @@
 .fullaccess {
   background-color: #2ae9dd;
   border-radius: 8px;
-  width: 80%;
+  width: 50%;
   text-align: center;
   height: 100%;
+  color: white;
+  padding: 3px;
 }
 .readonly {
   background-color: #00c2ff;
   border-radius: 8px;
-  width: 80%;
+  width: 50%;
   text-align: center;
   height: 100%;
+  color: white;
+  padding: 3px;
 }
 .writeonly {
   background-color: #fee074;
   border-radius: 8px;
-  width: 80%;
+  width: 50%;
   text-align: center;
   height: 100%;
+  color: white;
+  padding: 3px;
 }
 .noaccess {
   background-color: #fd7d7d;
   border-radius: 8px;
-  width: 80%;
+  width: 50%;
   text-align: center;
   height: 100%;
+  color: white;
+  padding: 3px;
 }
 .user__pagination {
   display: flex;

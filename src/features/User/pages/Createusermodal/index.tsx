@@ -14,22 +14,22 @@ interface Ioption{
 const Options: Ioption[]=[
   {
     key: 1,
-    value:1,
+    value:99,
     text: 'Full Access'
   },
   {
     key: 2,
-    value:2,
+    value:0,
     text: 'Read Only'
   },
   {
     key: 3,
-    value:3,
+    value:1,
     text: 'Write Only'
   },
   {
     key: 4,
-    value:4,
+    value:-1,
     text: 'No Access'
   },
 ]
@@ -60,11 +60,11 @@ function Createusermodal(): JSX.Element {
               <Input.Password size="large" placeholder="Password" onChange={e=>dispatch(createIamUser({passWord: e.target.value}))}  />
             </div>
             <br></br>
-            <div><span className='modal__span'>*</span>Permisstion:</div>
+            <div><span className='modal__span'>*</span>permission:</div>
             <div>
               <Dropdown
-                onChange={(e,data)=>dispatch(createIamUser({permisstion: data.value}))}
-                placeholder='Select permisstion'
+                onChange={(e,data)=>dispatch(createIamUser({permission: data.value}))}
+                placeholder='Select permission'
                 fluid
                 selection
                 options={Options}
@@ -83,8 +83,14 @@ function Createusermodal(): JSX.Element {
           icon='checkmark'
           onClick={() =>{
             setOpen(false)
-            rootUserApi.createIamUser(user.userName,user.passWord,user.permisstion)
-              .then(()=>rootUserApi.getListIamUser().then(data=>dispatch(getListIamUser(data.user))))
+            rootUserApi.createIamUser(user.userName,user.passWord,user.permission)
+              .then(()=>rootUserApi.getListIamUser()
+                .then(res=>{
+                  if(res.statusCode===200)
+                    dispatch(getListIamUser(res.users))
+                })
+              
+              )
           }
    
           }
