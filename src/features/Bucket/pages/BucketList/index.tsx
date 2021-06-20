@@ -106,10 +106,10 @@ function BucketList(): JSX.Element {
 
   useEffect(() => {
     const number = userInfo?.iamUsers?.length || 0 + 1;
-    if (numberOfLoadBucket === number) {
+    if (numberOfLoadBucket === number && buckets.length !== 0) {
       setLoadingTable(false);
     }
-  }, [numberOfLoadBucket]);
+  }, [numberOfLoadBucket, buckets]);
 
   //Create bucket
   const toggleModalCreate = () => {

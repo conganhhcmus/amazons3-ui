@@ -1,12 +1,13 @@
 import React from 'react'
 import { Button, Modal,Dropdown,Input } from 'semantic-ui-react'
-import { useDispatch,connect } from 'react-redux';
-import { editIamUser,editIamUserFormChange } from 'app/userlist/userliststore'
+import { useDispatch,connect, useSelector } from 'react-redux';
+import { editIamUser,editIamUserFormChange,getListIamUser } from 'app/userlist/userliststore'
 import {  Input as Input1 } from 'antd';
 import {Iuserstate} from '../UserList/index'
 import {user} from 'app/userlist/userliststore'
 import IconView from 'assets/icon/IconView';
 import rootUserApi from 'api/rootuserApi';
+import { RootState } from 'app/store';
 rootUserApi
 interface Ioption{
   key: string,
@@ -21,22 +22,22 @@ interface userdetail{
 const Options: Ioption[]=[
   {
     key: 'fullaccess',
-    value:1,
+    value:99,
     text: 'Full Access'
   },
   {
     key: 'readonly',
-    value:2,
+    value:0,
     text: 'Read Only'
   },
   {
     key: 'writeonly',
-    value:3,
+    value:1,
     text: 'Write Only'
   },
   {
     key: 'noaccess',
-    value:4,
+    value:-1,
     text: 'No Access'
   },
 ]
@@ -44,6 +45,13 @@ function Userdetailmodal(props: userdetail): JSX.Element {
   const [open, setOpen] = React.useState<boolean>(false)
   const dispatch = useDispatch()
   const { editUser,user,username }=props
+  const permiss=(data: number)=>{
+    if(data==99) return 'Full Access'
+    if(data==1) return 'Write only'
+    if(data==0) return 'Read only'
+    return 'No access'
+  }
+  const editData= useSelector((state: RootState) =>(state.userlistReducer.editIamUser))
   return (
     <Modal
       onClose={() => setOpen(false)}
@@ -69,25 +77,23 @@ function Userdetailmodal(props: userdetail): JSX.Element {
             <div>
               <Input fluid placeholder="Username" 
                 value={user.username}
-                onChange={(e,data)=>dispatch(editIamUserFormChange({userName: data.value}))}
+                disabled
               />
             </div>
             <br></br>
             <div><span className='modal__span'>*</span>Password:</div>
             <div>
               <Input1.Password  placeholder="Password" 
-                value={user.password}
-                onChange={e=>dispatch(editIamUserFormChange({passwordAge: e.target.value}))}
+                onChange={e=>dispatch(editIamUserFormChange({password: e.target.value}))}
               />
             </div>
             <br></br>
-            <div><span className='modal__span'>*</span>Permisstion:</div>
+            <div><span className='modal__span'>*</span>Permission:</div>
             <div>
               <Dropdown
-                value={editUser.permission}
+                placeholder={permiss(editUser.permission)}
                 onChange={(e,data)=>{
-                  console.log(data.value)
-                  dispatch(editIamUserFormChange({permisstion: data.value}))
+                  dispatch(editIamUserFormChange({permission: data.value}))
                 }}
                 fluid
                 selection
@@ -96,28 +102,20 @@ function Userdetailmodal(props: userdetail): JSX.Element {
             </div>
             <div style={{ paddingTop: '10px'}}>
               <div>
-                <div>Access key ID:</div>
+                <div>Public Token:</div>
                 <Input
-                  action={{
-                    color: 'teal',
-                    labelPosition: 'right',
-                    icon: 'copy',
-                    content: 'Copy',
-                  }}
-                  defaultValue='http://ww.short.url/c0opq'
+                  disabled
+                  defaultValue={editUser.publicToken}
                 />
+                <Button positive onClick={() => {navigator.clipboard.writeText(editUser.publicToken)}}>Copy</Button>
               </div>
               <div>
-                <div>Secrect key ID:</div>
+                <div>Private Token:</div>
                 <Input
-                  action={{
-                    color: 'teal',
-                    labelPosition: 'right',
-                    icon: 'copy',
-                    content: 'Copy',
-                  }}
-                  defaultValue='http://ww.short.url/c0opq'
+                  disabled
+                  defaultValue={editUser.privateToken}
                 />
+                <Button positive onClick={() => {navigator.clipboard.writeText(editUser.privateToken)}}>Copy</Button>
               </div>
             </div>
           </div>
@@ -128,12 +126,25 @@ function Userdetailmodal(props: userdetail): JSX.Element {
           Cancel
         </Button>
         <Button
-          type='submit'
+          content="Submit"
           labelPosition='right'
           icon='checkmark'
           onClick={() =>{
-            rootUserApi.getListIamUser()
-              .then(()=>setOpen(false))
+            rootUserApi.editIamUser(
+              editData._id,
+              editData.password,
+              editData.permission
+            )
+              .then(res=>{
+                if(res.statusCode===201){
+                  setOpen(false)
+                  rootUserApi.getListIamUser()
+                    .then(res=>{
+                      if(res.statusCode===200)
+                        dispatch(getListIamUser(res.users))
+                    })
+                }
+              })
           } 
           }
           positive
