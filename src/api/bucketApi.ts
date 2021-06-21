@@ -11,12 +11,20 @@ const bucketApi = {
     };
     return axiosClient.get(url, { params });
   },
-  createBucket: (bucketName: string, region: string, user_id: string): any => {
+  createBucket: (
+    bucketName: string,
+    region: string,
+    user_id: string,
+    username: string,
+    root_id: string | null,
+  ): any => {
     const url = `${baseUrl}api/v1/buckets`;
     const body = {
       name: bucketName,
       region,
       user_id,
+      username,
+      root_id,
     };
 
     return axiosClient.post(url, body);
@@ -28,7 +36,7 @@ const bucketApi = {
   getBucketDetail: (id: string): any => {
     const url = `${baseUrl}api/v1/buckets/${id}/detail`;
     return axiosClient.get(url);
-  }
+  },
 };
 
 export default bucketApi;

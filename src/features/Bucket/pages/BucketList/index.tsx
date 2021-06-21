@@ -13,7 +13,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'app/store';
 import { StopOutlined } from '@ant-design/icons';
 import { EPermission } from 'constants/enum';
-import rootUserApi from 'api/rootuserApi';
 
 export interface IBucket {
   id: string;
@@ -45,71 +44,24 @@ function BucketList(): JSX.Element {
   const [visibleModalCreate, setVisibleModalCreate] = useState<boolean>(false);
   const [buckets, setBuckets] = useState<IBucket[]>([]);
   const { userInfo } = useSelector((state: RootState) => state.user);
-  const [numberOfLoadBucket, setNumberOfLoadBucket] = useState<number>(0);
 
   const [createBucketForm] = Form.useForm();
   const history = useHistory();
-
-  const checkExistUsernameInBuckets = (data: any) => {
-    let isExist = true;
-    data?.map((bucket: any) => {
-      if (!bucket?.username) {
-        isExist = false;
-      }
-    });
-    return isExist;
-  };
-
-  const getBucketsFromApi = (userId: string) =>
-    new Promise((resolve) => {
-      bucketApi.getBuckets(userId).then((res: { data: any }) => {
-        const { data } = res;
-        if (!data) {
-          resolve({ data });
-        } else {
-          for (let i = 0; i < data.length; i++) {
-            const item = data[i];
-            rootUserApi.getUserById(item?.user_id).then((res: any) => {
-              data[i].username = res?.user?.username;
-              if (checkExistUsernameInBuckets(data)) {
-                resolve({ data });
-              }
-            });
-          }
-        }
-      });
-    });
 
   useEffect(() => {
     //Todo: Call api to get bucket list
     if (userInfo?.permission === EPermission.NO_ACCESS) {
       setLoadingTable(false);
     } else {
-      getBucketsFromApi(userInfo.userId).then((res: any) => {
+      bucketApi.getBuckets(userInfo.userId).then((res: { data: any }) => {
         let { data } = res;
         if (!data) data = [];
         const newData = normalizeBucketResponse(data);
-        setBuckets((prevBuckets) => [...prevBuckets, ...newData]);
-        setNumberOfLoadBucket((prevNumber) => prevNumber + 1);
-      });
-      userInfo?.iamUsers?.map((iamUserId: any) => {
-        getBucketsFromApi(iamUserId).then((res: any) => {
-          let { data } = res;
-          if (!data) data = [];
-          const newData = normalizeBucketResponse(data);
-          setBuckets((prevBuckets) => [...prevBuckets, ...newData]);
-          setNumberOfLoadBucket((prevNumber) => prevNumber + 1);
-        });
+        setBuckets(newData);
+        setLoadingTable(false);
       });
     }
   }, []);
-
-  useEffect(() => {
-    const number = userInfo?.iamUsers?.length || 0 + 1;
-    if (numberOfLoadBucket === number && buckets.length !== 0) {
-      setLoadingTable(false);
-    }
-  }, [numberOfLoadBucket, buckets]);
 
   //Create bucket
   const toggleModalCreate = () => {
@@ -121,7 +73,9 @@ function BucketList(): JSX.Element {
     const bucketName = createBucketForm.getFieldValue('bucketName');
     const region = createBucketForm.getFieldValue('region');
 
-    bucketApi.createBucket(bucketName, region, userInfo?.userId).then((res: any) => {
+    const root_id = userInfo?.owner?._id || null;
+
+    bucketApi.createBucket(bucketName, region, userInfo?.userId, userInfo?.username, root_id).then((res: any) => {
       const currentTimestamp = Date.now();
       const newBucket = {
         id: `${res?.data?.id}`,
@@ -132,10 +86,10 @@ function BucketList(): JSX.Element {
         lastActivity: currentTimestamp,
       };
       setBuckets([newBucket, ...buckets]);
-      message.info('Successful created');
       toggleModalCreate();
       createBucketForm.resetFields();
       setLoadingCreateModal(false);
+      message.info('Successful created');
     });
   };
 
@@ -192,7 +146,7 @@ function BucketList(): JSX.Element {
   };
 
   const handleViewBucket = (id: string, bucketName: string): void => {
-    history.push({pathname: `/buckets/${id}`, state: { bucketName: bucketName}});
+    history.push({ pathname: `/buckets/${id}`, state: { bucketName: bucketName } });
   };
 
   const handleDeleteBucket = (id: string): void => {

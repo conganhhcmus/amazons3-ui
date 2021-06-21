@@ -42,7 +42,7 @@ function Navbar(props: INavbar): JSX.Element {
       </div>
       <Dropdown overlayClassName="navbar__dropdown" overlay={menu} placement="bottomRight" arrow trigger={['click']}>
         <div className="navbar__avatar">
-          <AvatarCustom name={userInfo?.userName?.toUpperCase()} />
+          <AvatarCustom name={userInfo?.username?.toUpperCase()} />
           <IconArrowDown />
         </div>
       </Dropdown>
