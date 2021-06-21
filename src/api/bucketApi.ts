@@ -4,9 +4,12 @@ import axiosClient from './axiosClient';
 const baseUrl = 'https://storage-service-s3.herokuapp.com/';
 
 const bucketApi = {
-  getBuckets: (): Promise<{ data: IBucket[] }> => {
-    const url = `${baseUrl}api/v1/buckets`;
-    return axiosClient.get(url);
+  getBuckets: (userId: string): Promise<{ data: any }> => {
+    const url = `${baseUrl}api/v1/users/buckets`;
+    const params = {
+      user_id: userId,
+    };
+    return axiosClient.get(url, { params });
   },
   createBucket: (bucketName: string, region: string, user_id: string): any => {
     const url = `${baseUrl}api/v1/buckets`;

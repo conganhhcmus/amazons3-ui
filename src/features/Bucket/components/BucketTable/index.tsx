@@ -5,6 +5,7 @@ import IconView from 'assets/icon/IconView';
 import 'features/Bucket/components/BucketTable/styles.scss';
 import { IBucket } from 'features/Bucket/pages/BucketList';
 import React, { ChangeEvent } from 'react';
+import moment from 'moment';
 
 interface IBucketTable {
   loading: boolean;
@@ -28,16 +29,24 @@ function BucketTable(props: IBucketTable): JSX.Element {
       title: 'Bucket name',
       dataIndex: 'name',
       fixed: true,
-      sorter: true,
       sortDirection: ['descend', 'ascend'],
+      sorter: (bucket1: IBucket, bucket2: IBucket) => {
+        if (bucket1.name > bucket2.name) return 1;
+        if (bucket1.name < bucket2.name) return -1;
+        return 0;
+      },
       // eslint-disable-next-line react/display-name
       render: (text: string, record: IBucket) => <a onClick={() => onViewDetail(record?.id, record?.name)}>{text}</a>,
     },
     {
       title: 'Region',
       dataIndex: 'region',
-      sorter: true,
       sortDirection: ['descend', 'ascend'],
+      sorter: (bucket1: IBucket, bucket2: IBucket) => {
+        if (bucket1.region > bucket2.region) return 1;
+        if (bucket1.region < bucket2.region) return -1;
+        return 0;
+      },
       width: '150px',
       align: 'center',
     },
@@ -45,22 +54,36 @@ function BucketTable(props: IBucketTable): JSX.Element {
       title: 'User create',
       dataIndex: 'user',
       sortDirection: ['descend', 'ascend'],
-      sorter: true,
+      sorter: (bucket1: IBucket, bucket2: IBucket) => {
+        if (bucket1.user > bucket2.user) return 1;
+        if (bucket1.user < bucket2.user) return -1;
+        return 0;
+      },
       align: 'center',
     },
     {
       title: 'Create Date',
       dataIndex: 'createDate',
       sortDirection: ['descend', 'ascend'],
-      sorter: true,
+      sorter: (bucket1: IBucket, bucket2: IBucket) => {
+        if (new Date(bucket1.createDate) > new Date(bucket2.createDate)) return 1;
+        if (new Date(bucket1.createDate) < new Date(bucket2.createDate)) return -1;
+        return 0;
+      },
       align: 'center',
+      render: (date: number) => moment(date).format('DD/MM/YYYY'),
     },
     {
       title: 'Last activity',
       dataIndex: 'lastActivity',
       sortDirection: ['descend', 'ascend'],
-      sorter: true,
+      sorter: (bucket1: IBucket, bucket2: IBucket) => {
+        if (new Date(bucket1.lastActivity) > new Date(bucket2.lastActivity)) return 1;
+        if (new Date(bucket1.lastActivity) < new Date(bucket2.lastActivity)) return -1;
+        return 0;
+      },
       align: 'center',
+      render: (date: number) => moment(date).format('DD/MM/YYYY'),
     },
     {
       title: 'Action',
@@ -68,9 +91,10 @@ function BucketTable(props: IBucketTable): JSX.Element {
       // eslint-disable-next-line react/display-name
       render: (record: IBucket) => (
         <div className="d-flex justify-content-around align-items-center">
-          <div className="cursor-pointer" onClick={() => onViewDetail(record?.id, record?.name)}>
+
+          {/* <div className="cursor-pointer" onClick={() => onViewDetail(record?.id)}>
             <IconView />
-          </div>
+          </div> */}
           <Popconfirm
             title="Are you sure to delete?"
             onConfirm={() => onDelete(record?.id)}

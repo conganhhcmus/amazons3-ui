@@ -1,7 +1,7 @@
 import axiosClient from './axiosClient';
 
 const authApi = {
-  loginRootUser: (username: string, password: string): Promise<{ accessToken: string; msg: string }> => {
+  loginRootUser: (username: string, password: string): any => {
     const url = 'https://authorization-service-s3.herokuapp.com/api/v1/auth/login-root';
     const body = {
       username,
@@ -10,11 +10,7 @@ const authApi = {
 
     return axiosClient.post(url, body);
   },
-  loginUser: (
-    rootUsername: string,
-    username: string,
-    password: string,
-  ): Promise<{ accessToken: string; msg: string }> => {
+  loginUser: (rootUsername: string, username: string, password: string): any => {
     const url = 'https://authorization-service-s3.herokuapp.com/api/v1/auth/login-iam';
     const body = {
       rootUsername,

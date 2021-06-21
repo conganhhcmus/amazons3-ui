@@ -8,12 +8,12 @@ const iamUserApi = {
     const url = `${baseUrl}api/v1/buckets`;
     return axiosClient.get(url);
   },
-  createBucket: (userName: string, passWord: string, permisstion: number): Promise<{ newIamuser: user }> => {
+  createBucket: (userName: string, passWord: string, permission: number): Promise<{ newIamuser: user }> => {
     const url = `${baseUrl}api/v1/buckets`;
     const body = {
       userName,
       passWord,
-      permisstion,
+      permission,
     };
     return axiosClient.post(url, body);
   },

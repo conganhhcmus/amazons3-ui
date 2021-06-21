@@ -1,22 +1,25 @@
 import { Menu } from 'antd';
+import { RootState } from 'app/store';
 import IconBucket from 'assets/icon/IconBucket';
 import IconUsers from 'assets/icon/IconUsers';
 import 'components/Layout/Sidebar/styles.scss';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 
 interface ISidebar {
   selectedKey: string;
   onSelectKey: (selectedKeys: { selectedKeys?: React.Key[] }) => void;
+  collapsed: boolean;
 }
 
 function Sidebar(props: ISidebar): JSX.Element {
-  const { selectedKey, onSelectKey } = props;
+  const { selectedKey, onSelectKey, collapsed } = props;
   const history = useHistory();
-
+  const isRoot = useSelector((state: RootState) => (state.user.userInfo ? state.user.userInfo.userName : null));
   return (
     <>
-      <div className="logo" />
+      <div className="logo">{collapsed ? 'G2' : 'Group 2'}</div>
       <Menu
         className="sidebar-menu"
         mode="inline"
@@ -35,17 +38,19 @@ function Sidebar(props: ISidebar): JSX.Element {
         >
           Bucket
         </Menu.Item>
-        <Menu.Item
-          key="2"
-          icon={
-            <span>
-              <IconUsers />
-            </span>
-          }
-          onClick={() => history.push('/users')}
-        >
-          User
-        </Menu.Item>
+        {isRoot && (
+          <Menu.Item
+            key="2"
+            icon={
+              <span>
+                <IconUsers />
+              </span>
+            }
+            onClick={() => history.push('/users')}
+          >
+            User
+          </Menu.Item>
+        )}
       </Menu>
     </>
   );

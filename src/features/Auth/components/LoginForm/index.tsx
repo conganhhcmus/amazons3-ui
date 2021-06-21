@@ -27,7 +27,7 @@ function LoginForm(props: IProps): JSX.Element {
 
   return (
     <Form form={form} name="login" initialValues={initialValues} onFinish={onSubmit}>
-      {typeUser === ETypeUser.user && (
+      {typeUser === ETypeUser.USER && (
         <>
           <p className="label required">Root Username</p>
           <Form.Item name="rootUsername" rules={[{ required: true, message: 'Please input root username' }]}>
@@ -43,7 +43,7 @@ function LoginForm(props: IProps): JSX.Element {
       <Form.Item name="password" rules={[{ required: true, message: 'Please input password!' }]}>
         <Input.Password size="large" autoComplete="on" />
       </Form.Item>
-      {typeUser === ETypeUser.rootUser && (
+      {typeUser === ETypeUser.ROOT_USER && (
         <div className="d-flex justify-content-end mb-3">
           <Link to="/forgot-password" style={{ color: 'inherit' }}>
             Forgot password
@@ -53,7 +53,7 @@ function LoginForm(props: IProps): JSX.Element {
       <Button type="primary" htmlType="submit" className="w-100" size="large" loading={isSubmitting}>
         Log in
       </Button>
-      {typeUser === ETypeUser.rootUser && (
+      {typeUser === ETypeUser.ROOT_USER && (
         <p className="mt-3 mb-0 text-center">
           Don&apos;t have an account yet? <Link to="/register">Register</Link>
         </p>

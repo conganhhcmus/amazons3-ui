@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 import { saveToken, saveUserInfo } from 'app/userSlice';
 
 function Login(): JSX.Element {
-  const [currentTypeUser, setCurrentTypeUser] = useState<number>(ETypeUser.rootUser);
+  const [currentTypeUser, setCurrentTypeUser] = useState<number>(ETypeUser.ROOT_USER);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const dispatch = useDispatch();
@@ -26,18 +26,23 @@ function Login(): JSX.Element {
   const handleLogin = (values: ILoginValues) => {
     setIsSubmitting(true);
 
-    if (currentTypeUser === ETypeUser.rootUser) {
+    if (currentTypeUser === ETypeUser.ROOT_USER) {
       const { username, password } = values;
 
       authApi
         .loginRootUser(username, password)
-        .then((res) => {
+        .then((res: any) => {
           const { accessToken } = res;
           if (!accessToken) throw new Error(res?.msg || '');
           const userInfoEncode = accessToken.split('.')[1];
           const userInfoDecode = new Buffer(userInfoEncode, 'base64').toString();
           const userInfoParsed = JSON.parse(userInfoDecode);
-          dispatch(saveUserInfo(userInfoParsed));
+          dispatch(
+            saveUserInfo({
+              ...userInfoParsed,
+              ...res?.user,
+            }),
+          );
           dispatch(saveToken(accessToken));
           setIsSubmitting(false);
           message.success('Successful logged in');
@@ -46,18 +51,23 @@ function Login(): JSX.Element {
           setIsSubmitting(false);
           message.error(err?.message);
         });
-    } else if (currentTypeUser === ETypeUser.user) {
+    } else if (currentTypeUser === ETypeUser.USER) {
       const { rootUsername, username, password } = values;
 
       authApi
         .loginUser(rootUsername, username, password)
-        .then((res) => {
+        .then((res: any) => {
           const { accessToken } = res;
           if (!accessToken) throw new Error(res?.msg || '');
           const userInfoEncode = accessToken.split('.')[1];
           const userInfoDecode = new Buffer(userInfoEncode, 'base64').toString();
           const userInfoParsed = JSON.parse(userInfoDecode);
-          dispatch(saveUserInfo(userInfoParsed));
+          dispatch(
+            saveUserInfo({
+              ...userInfoParsed,
+              ...res?.user,
+            }),
+          );
           dispatch(saveToken(accessToken));
           setIsSubmitting(false);
           message.success('Successful logged in');
@@ -79,14 +89,14 @@ function Login(): JSX.Element {
             className="mr-4"
             title="Root user"
             icon={<IconRootUser />}
-            onClick={() => handleClickUserFrame(ETypeUser.rootUser)}
-            highlight={currentTypeUser === ETypeUser.rootUser}
+            onClick={() => handleClickUserFrame(ETypeUser.ROOT_USER)}
+            highlight={currentTypeUser === ETypeUser.ROOT_USER}
           />
           <UserFrame
             title="User"
             icon={<IconUser />}
-            onClick={() => handleClickUserFrame(ETypeUser.user)}
-            highlight={currentTypeUser === ETypeUser.user}
+            onClick={() => handleClickUserFrame(ETypeUser.USER)}
+            highlight={currentTypeUser === ETypeUser.USER}
           />
         </div>
         <LoginForm form={loginForm} isSubmitting={isSubmitting} typeUser={currentTypeUser} onSubmit={handleLogin} />
