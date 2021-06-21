@@ -14,7 +14,7 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(async (config: AxiosRequestConfig) => {
   const token = cookies.get('token');
-  if (token) config.headers.Authorization = `${token}`;
+  if (token) config.headers.Authorization = `Baerer ${token}`;
   return config;
 });
 
