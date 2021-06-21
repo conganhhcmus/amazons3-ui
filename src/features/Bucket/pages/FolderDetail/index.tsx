@@ -5,7 +5,7 @@ import { SearchOutlined, DownloadOutlined, UploadOutlined, SettingOutlined } fro
 import ObjectTable, { IObjectRow } from 'features/Object/components/ObjectTable';
 import { reverse } from 'lodash';
 import { FilterValue, SorterResult } from 'antd/lib/table/interface';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import ModalCreateFolder from 'features/Object/components/ModalCreateFolder';
 import { useParams } from 'react-router-dom';
 import objectApi from '../../../../api/objectApi';
@@ -41,6 +41,23 @@ const menu = (
   </Menu>
 );
 
+interface IState {
+  parent:{
+    id?: string;
+    name?: string;
+    level?: number;
+  };
+  bucket: {
+    id?: string;
+    name?: string;
+  }
+  goBackPath?: string;
+  child: {
+    id?: string;
+    name?: string;
+  }
+}
+
 function FolderDetail(): JSX.Element {
   const history = useHistory();
   const [loading, setLoading] = useState<boolean>(true);
@@ -49,7 +66,8 @@ function FolderDetail(): JSX.Element {
   const [createFolderForm] = Form.useForm();
   const inputFileRef: any = useRef(null);
   const { userInfo } = useSelector((state: RootState) => state.user);
-
+  const location = useLocation();
+  const useLocationState: IState = (location.state as IState);
 
   const [objectsList, setObjectsList] = useState<IObjectRow[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/ban-ts-comment
@@ -108,12 +126,48 @@ function FolderDetail(): JSX.Element {
     message.info('Delete multi objects');
   };
 
-  const handleViewObject = (parentId: any, objectID: number): void => {
+  const handleViewObject = (parentId: any, objectID: number, name: string): void => {
     const selectedObject = objectsList.find(object => object.id == objectID);
-    if (selectedObject?.type == "file"){
-      history.push(`/objects/${objectID}`);
-    }else if (selectedObject?.type == "folder"){
-      history.push(`/buckets/${id}/folder/${objectID}`);
+    if (selectedObject?.type == "file") {
+      history.push({
+        pathname: `/objects/${objectID}`,
+        state: {
+          bucket: {
+            id: useLocationState.bucket.id,
+            name: useLocationState.bucket.name
+          },
+          parent: {
+            id: parentId,
+            name: useLocationState.child.name,
+            level: 1
+          },
+          goBackPath: location.pathname,
+          child: {
+            id: selectedObject.name,
+            name: selectedObject.id,
+          }
+        }
+      });
+    } else if (selectedObject?.type == "folder") {
+      history.push({
+        pathname: `/buckets/${id}/folder/${objectID}`,
+        state: {
+          parent: {
+            id: parentId,
+            name: useLocationState.child.name,
+            level: 1
+          },
+          bucket: {
+            id: useLocationState.bucket.id,
+            name: useLocationState.bucket.name
+          },
+          goBackPath: location.pathname,
+          child: {
+            name: name,
+            id: objectID
+          }
+        }
+      });
     }
   };
 
@@ -147,11 +201,20 @@ function FolderDetail(): JSX.Element {
   return (
     <>
       <HeaderPage
-        title="Folder name"
+        title={useLocationState.child.name ? useLocationState.child.name : "Folder name"}
         breadcrumbs={[
           {
-            label: 'Back to buckets list',
-            path: `/buckets/`,
+            label: 'Buckets',
+            path: `/buckets/${useLocationState.parent.id}`,
+          },
+          {
+            label: `${useLocationState.bucket.name}`,
+            path: `/buckets/${useLocationState.bucket.id}`,
+            state: { bucketName: useLocationState.bucket.name }
+          },
+          {
+            label: `${useLocationState.child.name}`,
+            path: `/buckets/${useLocationState.parent.id}/folder/${useLocationState.child.id}`,
           },
         ]}
       />

@@ -22,6 +22,10 @@ const bucketApi = {
     const url = `${baseUrl}api/v1/buckets/${id}`;
     return axiosClient.delete(url);
   },
+  getBucketDetail: (id: string): any => {
+    const url = `${baseUrl}api/v1/buckets/${id}/detail`;
+    return axiosClient.get(url);
+  }
 };
 
 export default bucketApi;

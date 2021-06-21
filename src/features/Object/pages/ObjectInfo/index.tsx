@@ -5,7 +5,7 @@ import {DownloadOutlined} from "@ant-design/icons";
 import objectApi from '../../../../api/objectApi';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import rootUserApi from '../../../../api/rootuserApi';
 
 const { Title, Text } = Typography;
@@ -42,6 +42,23 @@ const normalizeObjectInfoResponse = (data: any) => {
   return newData;
 };
 
+interface IState {
+  parent:{
+    id?: string;
+    name?: string;
+    level?: number;
+  };
+  bucket: {
+    id?: string;
+    name?: string;
+  }
+  goBackPath?: string;
+  child: {
+    id?: string;
+    name?: string;
+  }
+}
+
 function ObjectInfo(): JSX.Element {
   const history = useHistory();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/ban-ts-comment
@@ -49,17 +66,16 @@ function ObjectInfo(): JSX.Element {
   const {id} = useParams();
   const [objectData, setObjectData] = useState<IObjectInfo>();
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
+  const useLocationState: IState = (location.state as IState);
 
   useEffect(()=>{
     setLoading(true);
     objectApi.getDetailObject(id).then( (res: any) => {
-      console.log(res);
       if (res.data != null){
         const normalizaData = normalizeObjectInfoResponse(res.data);
-
         const owner_id = normalizaData.user_id;
         rootUserApi.getDetailsUser(owner_id).then((res: any)=>{
-          console.log(res);
           normalizaData.user_name = res.user.username;
           setObjectData(normalizaData);
           setLoading(false);
@@ -83,8 +99,13 @@ function ObjectInfo(): JSX.Element {
         title={objectData?.name ? objectData.name : "Object"}
         breadcrumbs={[
           {
-            label: 'Back to buckets list',
+            label: 'Buckets',
             path: `/buckets/`,
+          },
+          {
+            label: `${useLocationState.bucket.name}`,
+            path: `/buckets/${useLocationState.bucket.id}`,
+            state: { bucketName: useLocationState.bucket.name }
           },
         ]}
       />

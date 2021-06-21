@@ -5,13 +5,14 @@ import { SearchOutlined, DownloadOutlined, UploadOutlined, SettingOutlined } fro
 import ObjectTable, { IObjectRow } from 'features/Object/components/ObjectTable';
 import { reverse } from 'lodash';
 import { FilterValue, SorterResult } from 'antd/lib/table/interface';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import ModalCreateFolder from 'features/Object/components/ModalCreateFolder';
 import { useParams } from 'react-router-dom';
 import objectApi from '../../../../api/objectApi';
 import moment from 'moment';
 import { RootState } from '../../../../app/store';
 import { useSelector } from 'react-redux';
+import bucketApi from '../../../../api/bucketApi';
 
 const normalizeObjectResponse = (data: any) => {
   const newData = reverse(
@@ -41,6 +42,10 @@ const menu = (
   </Menu>
 );
 
+interface IState {
+  bucketName?: string;
+}
+
 function BucketDetail(): JSX.Element {
   const history = useHistory();
   const [loading, setLoading] = useState<boolean>(true);
@@ -49,7 +54,8 @@ function BucketDetail(): JSX.Element {
   const [createFolderForm] = Form.useForm();
   const inputFileRef: any = useRef(null);
   const { userInfo } = useSelector((state: RootState) => state.user);
-
+  const location = useLocation();
+  const [bucketName, setBucketname]: any = useState((location.state as IState)?.bucketName);
   const [objectsList, setObjectsList] = useState<IObjectRow[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -107,12 +113,48 @@ function BucketDetail(): JSX.Element {
     message.info('Delete multi objects');
   };
 
-  const handleViewObject = (parentId: any, objectID: number): void => {
+  const handleViewObject = (parentId: any, objectID: number, name: string): void => {
     const selectedObject = objectsList.find(object => object.id == objectID);
     if (selectedObject?.type == "file"){
-      history.push(`/objects/${objectID}`);
+      history.push({
+        pathname:`/objects/${objectID}`,
+        state: {
+          parent: {
+            id: id,
+            name: bucketName,
+            level: 0
+          },
+          bucket: {
+            id: id,
+            name: bucketName
+          },
+          goBackPath: null,
+          child: {
+            id: selectedObject.name,
+            name: selectedObject.id,
+          }
+        },
+      });
     }else if (selectedObject?.type == "folder"){
-      history.push(`/buckets/${id}/folder/${objectID}`);
+      history.push({
+        pathname: `/buckets/${id}/folder/${objectID}`,
+        state: {
+          parent: {
+            id: id,
+            name: bucketName,
+            level: 0
+          },
+          bucket: {
+            id: id,
+            name: bucketName
+          },
+          goBackPath: null,
+          child: {
+            name: name,
+            id: objectID
+          }
+        }
+      });
     }
   };
 
@@ -146,11 +188,15 @@ function BucketDetail(): JSX.Element {
   return (
     <>
       <HeaderPage
-        title="Bucket name"
+        title={bucketName}
         breadcrumbs={[
           {
-            label: 'Back to buckets list',
+            label: `Buckets`,
             path: `/buckets/`,
+          },
+          {
+            label: `${bucketName}`,
+            path: `/buckets/${id}`,
           },
         ]}
       />
@@ -200,5 +246,6 @@ function BucketDetail(): JSX.Element {
     </>
   );
 }
+
 
 export default BucketDetail;
