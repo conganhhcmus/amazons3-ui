@@ -6,6 +6,7 @@ import 'components/HeaderPage/styles.scss';
 interface IBreadcrumb {
   label: string;
   path: string;
+  state?: any;
 }
 
 interface IHeaderPage {
@@ -22,7 +23,10 @@ function HeaderPage(props: IHeaderPage): JSX.Element {
       <Breadcrumb>
         {breadcrumbs?.map((breadcrumbs: IBreadcrumb, index: number) => (
           <Breadcrumb.Item key={index}>
-            <Link to={breadcrumbs?.path}>{breadcrumbs?.label}</Link>
+            <Link to ={{
+              pathname: `${breadcrumbs?.path}`,
+              state: breadcrumbs?.state,
+            }} >{breadcrumbs?.label}</Link>
           </Breadcrumb.Item>
         ))}
       </Breadcrumb>

@@ -17,7 +17,7 @@ interface IBucketTable {
     sorter: SorterResult<IBucket> | SorterResult<IBucket>[],
   ) => void;
   onSelect: (selectedRowKeys: React.Key[], selectedRows: IBucket[]) => void;
-  onViewDetail: (id: string) => void;
+  onViewDetail: (id: string, bucketName: string) => void;
   onDelete: (id: string) => void;
 }
 
@@ -36,7 +36,7 @@ function BucketTable(props: IBucketTable): JSX.Element {
         return 0;
       },
       // eslint-disable-next-line react/display-name
-      render: (text: string, record: IBucket) => <a onClick={() => onViewDetail(record?.id)}>{text}</a>,
+      render: (text: string, record: IBucket) => <a onClick={() => onViewDetail(record?.id, record?.name)}>{text}</a>,
     },
     {
       title: 'Region',
@@ -91,6 +91,7 @@ function BucketTable(props: IBucketTable): JSX.Element {
       // eslint-disable-next-line react/display-name
       render: (record: IBucket) => (
         <div className="d-flex justify-content-around align-items-center">
+
           {/* <div className="cursor-pointer" onClick={() => onViewDetail(record?.id)}>
             <IconView />
           </div> */}

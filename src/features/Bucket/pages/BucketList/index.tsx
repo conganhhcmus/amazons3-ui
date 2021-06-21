@@ -191,8 +191,8 @@ function BucketList(): JSX.Element {
     console.log('🚀 ~ file: index.tsx ~ line 72 ~ handleChange ~ sorter', sorter);
   };
 
-  const handleViewBucket = (id: string): void => {
-    history.push(`/buckets/${id}`);
+  const handleViewBucket = (id: string, bucketName: string): void => {
+    history.push({pathname: `/buckets/${id}`, state: { bucketName: bucketName}});
   };
 
   const handleDeleteBucket = (id: string): void => {

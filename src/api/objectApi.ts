@@ -13,21 +13,24 @@ const objectApi = {
     return axiosClient.get(url);
   },
 
-  uploadFile: (bucketId: any, file: any, parentId: any): any => {
+  uploadFile: (bucketId: any, file: any, parentId: any, userId: any): any => {
     const url = `${storage_service_api}/api/v1/buckets/${bucketId}/upload`;
     const body: any = new FormData();
     body.append('file', file);
+    body.append('file_type', file.type);
+    body.append('user_id', userId);
     if (parentId) {
       body.append('parent', parentId);
     }
     return axiosClient.post(url, body);
   },
 
-  addFolder: (folderName: any, bucketId: any, parentId: any): any => {
+  addFolder: (folderName: any, bucketId: any, parentId: any, userId: any): any => {
     const url = `${storage_service_api}/api/v1/buckets/${bucketId}/addFolder`;
     const body = {
       name: folderName,
       parent: parentId,
+      user_id: userId,
     };
 
     return axiosClient.post(url, body);
@@ -42,7 +45,8 @@ const objectApi = {
   deleteObject: (objectId: any) => {
     const url =   `${storage_service_api}/api/v1/objects/${objectId}`;
     return axiosClient.delete(url);
-  }
+  },
+
 };
 
 export default objectApi;

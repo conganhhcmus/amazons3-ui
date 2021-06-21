@@ -22,7 +22,7 @@ interface IObjectTable {
     sorter: SorterResult<IObjectRow> | SorterResult<IObjectRow>[],
   ) => void;
   onSelect: (selectedRowKeys: React.Key[], selectedRows: IObjectRow[]) => void;
-  onViewDetail: (bucketID: number, objectID: number) => void;
+  onViewDetail: (bucketID: number, objectID: number, name: string) => void;
 }
 
 function ObjectTable(props: IObjectTable): JSX.Element {
@@ -36,7 +36,7 @@ function ObjectTable(props: IObjectTable): JSX.Element {
       sorter: true,
       sortDirection: ['descend', 'ascend'],
       // eslint-disable-next-line react/display-name
-      render: (text: string, record: IObjectRow) => <a onClick={() => onViewDetail(parentID, record?.id)} >{text}</a>,
+      render: (text: string, record: IObjectRow) => <a onClick={() => onViewDetail(parentID, record?.id, record?.name)} >{text}</a>,
     },
     {
       title: 'Folder',
