@@ -40,6 +40,7 @@ const rootUserApi = {
       password,
       permission,
     };
+    console.log(body);
     return axiosClient.put(url, body);
   },
   deleteIamUser: (id: string): Promise<{ statusCode: number; error: string }> => {

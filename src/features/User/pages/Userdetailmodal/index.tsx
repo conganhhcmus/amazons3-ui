@@ -81,10 +81,10 @@ function Userdetailmodal(props: userdetail): JSX.Element {
               />
             </div>
             <br></br>
-            <div><span className='modal__span'>*</span>Password:</div>
+            <div><span className='modal__span'>*</span>New Password:</div>
             <div>
               <Input1.Password  placeholder="Password" 
-                onChange={e=>dispatch(editIamUserFormChange({password: e.target.value}))}
+                onChange={e=>dispatch(editIamUserFormChange({newpassword: e.target.value}))}
               />
             </div>
             <br></br>
@@ -132,7 +132,7 @@ function Userdetailmodal(props: userdetail): JSX.Element {
           onClick={() =>{
             rootUserApi.editIamUser(
               editData._id,
-              editData.password,
+              editData.newpassword,
               editData.permission
             )
               .then(res=>{

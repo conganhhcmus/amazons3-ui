@@ -21,7 +21,8 @@ const initialState = {
     _id:'',
     username:'',
     password:'',
-    owner:''
+    owner:'',
+    newpassword:'',
   },
   listUser: [
     {
