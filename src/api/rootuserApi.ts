@@ -1,15 +1,15 @@
 import axiosClient from './axiosClient';
 const baseUrl = 'https://user-service-s3.herokuapp.com/';
-interface childResponse{
-  privateToken: string,
-  publicToken:string,
-  owner:string,
-  password:string,
-  permission:number,
-  username:string,
-  __v?:number,
-  _id?:string,
-  lastLogged?:string,
+interface childResponse {
+  privateToken: string;
+  publicToken: string;
+  owner: string;
+  password: string;
+  permission: number;
+  username: string;
+  __v?: number;
+  _id?: string;
+  lastLogged?: string;
 }
 const rootUserApi = {
   getListIamUser: (): Promise<{ statusCode: number; users: childResponse[] }> => {
@@ -42,17 +42,12 @@ const rootUserApi = {
     };
     return axiosClient.put(url, body);
   },
-  deleteIamUser: (id: string): Promise<{ statusCode: number, error: string}> => {
+  deleteIamUser: (id: string): Promise<{ statusCode: number; error: string }> => {
     const url = `${baseUrl}api/v1/users/root-users/child/${id}`;
     return axiosClient.delete(url);
   },
 
-  getDetailsUser: (id: string): any =>{
-    const url = `${baseUrl}api/v1/users/${id}`;
-    return axiosClient.get(url);
-  },
-    
-  getUserById: (id: string): any => {
+  getDetailsUser: (id: string): any => {
     const url = `${baseUrl}api/v1/users/${id}`;
     return axiosClient.get(url);
   },
