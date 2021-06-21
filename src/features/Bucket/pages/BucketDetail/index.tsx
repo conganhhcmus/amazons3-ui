@@ -22,7 +22,7 @@ const normalizeObjectResponse = (data: any) => {
       folder: item?.folder,
       type: item?.type,
       size: item?.size,
-      dateModified: item?.last_update ? item?.last_update : moment(Date.now()).format('DD/MM/YYYY'),
+      dateModified: item?.last_update ? moment(Date.parse(item?.last_update)).format('DD/MM/YYYY HH:mm:ss') : moment(Date.now()).format('DD/MM/YYYY HH:mm:ss'),
     })),
   );
   return newData;
