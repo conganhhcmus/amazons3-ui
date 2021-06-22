@@ -4,10 +4,10 @@ import axiosClient from './axiosClient';
 const baseUrl = 'https://storage-service-s3.herokuapp.com/';
 
 const bucketApi = {
-  getBuckets: (userId: string): Promise<{ data: any }> => {
+  getBuckets: (root_id: string): Promise<{ data: any }> => {
     const url = `${baseUrl}api/v1/users/buckets`;
     const params = {
-      user_id: userId,
+      root_id,
     };
     return axiosClient.get(url, { params });
   },
