@@ -12,7 +12,6 @@ import objectApi from '../../../../api/objectApi';
 import moment from 'moment';
 import { RootState } from '../../../../app/store';
 import { useSelector } from 'react-redux';
-import bucketApi from '../../../../api/bucketApi';
 
 const normalizeObjectResponse = (data: any) => {
   const newData = reverse(
@@ -166,7 +165,6 @@ function BucketDetail(): JSX.Element {
   const handleCreateFolder = (): void => {
     const folderName = createFolderForm.getFieldValue('name');
     objectApi.addFolder(folderName, id, null, userInfo.userId).then((res: any) => {
-      console.log(res);
       if (res.data) {
         toggleModalCreate();
         message.info('Create new folder');
@@ -179,7 +177,6 @@ function BucketDetail(): JSX.Element {
   const handleUploadFile = (e: any) => {
     const file = e.target.files[0];
     objectApi.uploadFile(id, file, null, userInfo.userId).then((res: any) => {
-      console.log({ res })
       setObjectsList([res]);
       message.success('Successful uploaded file');
     });
