@@ -53,7 +53,8 @@ function BucketList(): JSX.Element {
     if (userInfo?.permission === EPermission.NO_ACCESS) {
       setLoadingTable(false);
     } else {
-      bucketApi.getBuckets(userInfo.userId).then((res: { data: any }) => {
+      const root_id = userInfo?.owner ? userInfo?.owner._id : userInfo?.userId;
+      bucketApi.getBuckets(root_id).then((res: { data: any }) => {
         let { data } = res;
         if (!data) data = [];
         const newData = normalizeBucketResponse(data);
@@ -73,7 +74,7 @@ function BucketList(): JSX.Element {
     const bucketName = createBucketForm.getFieldValue('bucketName');
     const region = createBucketForm.getFieldValue('region');
 
-    const root_id = userInfo?.owner?._id || null;
+    const root_id = userInfo?.owner ? userInfo?.owner?._id : userInfo.userId;
 
     bucketApi.createBucket(bucketName, region, userInfo?.userId, userInfo?.username, root_id).then((res: any) => {
       const currentTimestamp = Date.now();
