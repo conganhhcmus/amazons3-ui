@@ -65,30 +65,30 @@ function ObjectInfo(): JSX.Element {
   const history = useHistory();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const {id} = useParams();
+  const { id } = useParams();
   const [objectData, setObjectData] = useState<IObjectInfo>();
   const [loading, setLoading] = useState(false);
   const location = useLocation();
   const useLocationState: IState = (location.state as IState);
 
-  useEffect(()=>{
+  useEffect(() => {
     setLoading(true);
-    objectApi.getDetailObject(id).then( (res: any) => {
-      if (res.data != null){
+    objectApi.getDetailObject(id).then((res: any) => {
+      if (res.data != null) {
         const normalizaData = normalizeObjectInfoResponse(res.data);
         const owner_id = normalizaData.user_id;
-        rootUserApi.getDetailsUser(owner_id).then((res: any)=>{
+        rootUserApi.getDetailsUser(owner_id).then((res: any) => {
           normalizaData.user_name = res.user.username;
           setObjectData(normalizaData);
           setLoading(false);
         });
       }
     });
-  },[]);
+  }, []);
 
   const deleteObjectHandle = () => {
     objectApi.deleteObject(id).then((res: any) => {
-      if (res.message == "success"){
+      if (res.message == "success") {
         message.info('Deleted.');
         history.goBack();
       }
@@ -98,6 +98,12 @@ function ObjectInfo(): JSX.Element {
   const copyUrlHandle = () => {
     navigator.clipboard.writeText(`${STORAGE_SERVICE}${objectData?.path}`);
     message.success("Object's url is copied.");
+  }
+
+  const downloadObjectHandle = () => {
+    // objectApi.downloadObject(id).then((res: any)=>{
+    //   console.log(res);
+    // });
   }
 
   return (
@@ -125,7 +131,10 @@ function ObjectInfo(): JSX.Element {
           <div className="d-flex justify-content-between">
             <div className="bucket-table-container__actions">
               <Button className="ml-2" type="default" icon={<DownloadOutlined />}>
-                Download
+                <a href={`${STORAGE_SERVICE}/api/v1/objects/${id}/download`}
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  style={{color: "black"}}>Download</a>
               </Button>
               <Button className="ml-2" type="default" icon={<EditOutlined />}>
                 Edit
