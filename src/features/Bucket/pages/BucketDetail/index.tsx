@@ -22,7 +22,7 @@ const normalizeObjectResponse = (data: any) => {
       folder: item?.folder,
       type: item?.type,
       size: item?.size,
-      dateModified: item?.last_update ? item?.last_update : moment(Date.now()).format('DD/MM/YYYY'),
+      dateModified: item?.last_update ? moment(Date.parse(item?.last_update)).format('DD/MM/YYYY HH:mm:ss') : moment(Date.now()).format('DD/MM/YYYY HH:mm:ss'),
     })),
   );
   return newData;
@@ -210,13 +210,13 @@ function BucketDetail(): JSX.Element {
               Upload
             </Button>
             <input ref={inputFileRef} type="file" onChange={handleUploadFile} style={{ display: 'none' }} />
-            <Button className="ml-2" type="default" icon={<DownloadOutlined />}>
+            <Button className="ml-2" type="default" icon={<DownloadOutlined />} hidden={true}>
               Download
             </Button>
             <Button className="ml-2" type="default" onClick={toggleModalCreate}>
               Create folder
             </Button>
-            <Button className="ml-2" type="primary" danger onClick={handleDeleteMulObjects}>
+            <Button className="ml-2" type="primary" danger onClick={handleDeleteMulObjects} hidden={true}>
               Delete
             </Button>
             <Dropdown overlay={menu} placement="bottomCenter" arrow>

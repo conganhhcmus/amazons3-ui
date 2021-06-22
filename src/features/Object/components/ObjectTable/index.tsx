@@ -52,7 +52,7 @@ function ObjectTable(props: IObjectTable): JSX.Element {
       sorter: true,
     },
     {
-      title: 'Size',
+      title: 'Size (bytes)',
       dataIndex: 'size',
       sortDirection: ['descend', 'ascend'],
       sorter: true,
