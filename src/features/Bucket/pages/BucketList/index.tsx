@@ -30,7 +30,7 @@ const normalizeBucketResponse = (buckets: any) => {
       name: bucket?.name,
       region: bucket?.region,
       user: bucket?.username,
-      createDate: bucket?.last_update,
+      createDate: bucket?.created_at,
       lastActivity: bucket?.last_update,
     })),
   );
