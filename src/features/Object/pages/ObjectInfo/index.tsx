@@ -100,10 +100,8 @@ function ObjectInfo(): JSX.Element {
     message.success("Object's url is copied.");
   }
 
-  const downloadObjectHandle = () => {
-    // objectApi.downloadObject(id).then((res: any)=>{
-    //   console.log(res);
-    // });
+  const editHandle = () => {
+    message.warn("Edit feature will be coming soon!");
   }
 
   return (
@@ -136,7 +134,7 @@ function ObjectInfo(): JSX.Element {
                   rel="noopener noreferrer"
                   style={{color: "black"}}>Download</a>
               </Button>
-              <Button className="ml-2" type="default" icon={<EditOutlined />}>
+              <Button className="ml-2" type="default" icon={<EditOutlined />} onClick={editHandle}>
                 Edit
               </Button>
               <Popconfirm className="ml-2" title="Are you sure to delete this object?" onConfirm={deleteObjectHandle} okText="Yes" cancelText="No">
@@ -181,7 +179,7 @@ function ObjectInfo(): JSX.Element {
             </Row>
             <Row>
               <Col span={18} push={6}>
-                <a target="_blank" rel="noopener noreferrer" href={`${STORAGE_SERVICE}${objectData?.path}`}>Click to see object</a>
+                <a target="_blank" rel="noopener noreferrer" href={`${STORAGE_SERVICE}${objectData?.path}`}>Click to see object  </a>
                 <span className="cursor-pointer" onClick={copyUrlHandle}>
                   <CopyOutlined />
                 </span>
