@@ -210,13 +210,13 @@ function BucketDetail(): JSX.Element {
               Upload
             </Button>
             <input ref={inputFileRef} type="file" onChange={handleUploadFile} style={{ display: 'none' }} />
-            <Button className="ml-2" type="default" icon={<DownloadOutlined />}>
+            <Button className="ml-2" type="default" icon={<DownloadOutlined />} hidden={true}>
               Download
             </Button>
             <Button className="ml-2" type="default" onClick={toggleModalCreate}>
               Create folder
             </Button>
-            <Button className="ml-2" type="primary" danger onClick={handleDeleteMulObjects}>
+            <Button className="ml-2" type="primary" danger onClick={handleDeleteMulObjects} hidden={true}>
               Delete
             </Button>
             <Dropdown overlay={menu} placement="bottomCenter" arrow>
